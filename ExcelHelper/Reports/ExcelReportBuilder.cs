@@ -4,7 +4,6 @@ using ExcelHelper.Reports.ExcelReports.PropertyOptions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Reflection;
 
 namespace ExcelHelper.Reports
@@ -43,22 +42,32 @@ namespace ExcelHelper.Reports
         {
             if (list is IEnumerable columns)
             {
+
                 Row row = new();
-                var location = options.StartLocation;
+                row.StartLocation = new Location(options.StartLocation.X, options.StartLocation.Y);
+                row.EndLocation = new Location(options.StartLocation.X, options.StartLocation.Y);
+                var location =new Location(options.StartLocation.X,options.StartLocation.Y);
                 foreach (var column in columns)
                 {
-                    PropertyInfo[] props = columns.GetType().GetProperties();
-                    foreach (PropertyInfo prop in props)
+                    if (column is string)
                     {
-                        if (column != null)
+                        row.Columns.Add(AddColumn(column, "", new ColumnPropertyOptions(location)));
+                        location.X++;
+                    }
+                    else
+                    {
+                        PropertyInfo[] props = column.GetType().GetProperties();
+                        foreach (PropertyInfo prop in props)
                         {
-                            row.Columns.Add(AddColumn(prop.GetValue(column), prop.Name, new ColumnPropertyOptions(location)));
-                            row.Data.Add(row);
-                            location.Y++;
+                            if (column != null)
+                            {
+                                row.Columns.Add(AddColumn(column, prop.Name, new ColumnPropertyOptions(new Location(location.X,location.Y))));
+                                location.X++;
+                            }
                         }
                     }
                 }
-                row.EndLocation = location;
+                row.EndLocation = new Location(location.X-1, location.Y) ;
                 return row;
             }
             return null;
@@ -96,12 +105,12 @@ namespace ExcelHelper.Reports
             {
                 Table table = new();
                 var location = options.StartLocation;
-                table.StartLocation = location;
+                table.StartLocation = new Location(location.X, location.Y);
+                table.EndLocation = new Location(location.X, location.Y);
                 foreach (var item in rows)
                 {
-                    table.Rows.Add(AddRow(((Row)item).Columns, new RowPropertyOptions(location)));
-                    table.Data.Rows.Add(item);
-                    location.X++;
+                    table.Rows.Add(AddRow(new List<object> { item }, new RowPropertyOptions(location)));
+                    location.Y++;
                 }
                 table.EndLocation = location;
                 return table;
@@ -111,11 +120,8 @@ namespace ExcelHelper.Reports
 
         public Column AddColumn(object cell, string cellName, ColumnPropertyOptions options)
         {
-            if (cell is IEnumerable) return null;
-            DataTable table = new();
-            var column = table.Columns.Add(cell.ToString(), cell.GetType());
+            if (cell is IEnumerable && !(cell is string)) return null;
             var col = ConfigColumn(cell, cellName, options);
-            col.Data = column;
             return col;
         }
 
@@ -135,13 +141,22 @@ namespace ExcelHelper.Reports
         {
             Column column = new(options.StartLocation);
             column.Location = options.StartLocation;
-            column.Value = GetPropValue(cell, cellName);
-            column.Type = cell.GetType();
-            column.Name = cellName;
+            if (cell is string)
+            {
+                column.Value = cell;
+                ConfigByType(cell, column);
+                return column;
+            }
+            else
+            {
+                column.Value = GetPropValue(cell, cellName);
+                column.Type = cell.GetType();
+                column.Name = cellName;
 
-            ConfigByType(cell, column);
-            ConfigByName(cell, cellName, column);
-            return column;
+                ConfigByType(cell, column);
+                ConfigByName(cell, cellName, column);
+                return column;
+            }
         }
 
         private static void ConfigByName(object cell, string cellName, Column column)
@@ -164,7 +179,7 @@ namespace ExcelHelper.Reports
             {
                 case "Debit":
                     column.Align = TextAlign.rtl;
-                    column.AutoFill=true;
+                    column.AutoFill = true;
                     column.Category = Category.Currency;
                     break;
                 case "Credit":

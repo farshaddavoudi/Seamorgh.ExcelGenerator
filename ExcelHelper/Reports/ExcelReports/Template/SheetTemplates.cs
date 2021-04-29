@@ -1,5 +1,6 @@
 ﻿using ExcelHelper.Reports.ExcelReports.PropertyOptions;
 using ExcelHelper.VoucherStatementReport;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace ExcelHelper.Reports.ExcelReports.Template
@@ -10,22 +11,16 @@ namespace ExcelHelper.Reports.ExcelReports.Template
         {
             ExcelReportBuilder builder = new();
             Sheet sheet = new("RemainReport", "RemainReport");
-            var row = builder.AddRow(new string[] { "کد حساب", "بدهکار", "بستانکار" }.GetEnumerator(), new RowPropertyOptions(new Location("A", 3)));
-            var column = builder.AddColumn(result.ReportName, "ReportName", new ColumnPropertyOptions(new Location("H", 1)));
+            var row = builder.AddRow(new List<string> { "کد حساب", "بدهکار", "بستانکار" }, new RowPropertyOptions(new Location("A", 3)));
+            var column = builder.AddColumn(result.ReportName,"ReportName", new ColumnPropertyOptions(new Location("H", 1)));
             var table = builder.AddTable(result.RowResult, new TablePropertyOptions(new Location("A", 4)));
-            //foreach (var item in table.Rows)
-            //{
-            //    item.Formulas = $"{item.GetColumn(item.StartLocation.X).Location.GetName()}:{item.GetColumn(item.EndLocation.X).Location.GetName()}";
-            //    var sumcolum = item.AddColumn();
-            //    sumcolum.Value = item.Formulas;
-            //}
-            var currentLocation = new Location(1, table.EndLocation.Y);
-            var row2 = builder.AddRow(new string[] { "کد حساب", "بدهکار", "بستانکار" }.GetEnumerator(), new RowPropertyOptions(currentLocation));
+            var currentLocation = table.NextVerticalLocation;
+            var row2 = builder.AddRow(new List<string> { "کد حساب", "بدهکار", "بستانکار" }, new RowPropertyOptions(currentLocation));
             currentLocation = new Location(currentLocation.X, currentLocation.Y + 1);
             var table2 = builder.AddTable(result.RowResult, new TablePropertyOptions(currentLocation));
-            currentLocation = new Location(currentLocation.X, currentLocation.Y + 1);
+            currentLocation = table2.NextHorizontalLocation;
             var accountheader = TableTemplates.AccountHeader(currentLocation);
-            currentLocation = new Location(currentLocation.X + 1, currentLocation.Y);
+            currentLocation = accountheader.NextVerticalLocation;
             var multiplexHeader = TableTemplates.Multiplex(result.SummaryAccounts, currentLocation);
 
 

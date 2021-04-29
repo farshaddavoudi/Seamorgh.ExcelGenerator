@@ -2,6 +2,7 @@
 using ExcelHelper.VoucherStatementReport;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MyApp.Controllers
 {
@@ -20,7 +21,9 @@ namespace MyApp.Controllers
                 {
                     new SummaryAccount {AccountName = "MyAccount"},
                     new SummaryAccount {AccountName = "MyAccount2"}
+                      
                 },
+                
                 RowResult = new List<VoucherStatementRowResult>
                 {
                     new VoucherStatementRowResult
@@ -37,6 +40,14 @@ namespace MyApp.Controllers
                     }
                 }
             };
+            Multiplex multiplex = new Multiplex
+            {
+                After = 100000,
+                Befor=50000
+            };
+            arg.SummaryAccounts.Where(x=>x.AccountName== "MyAccount").FirstOrDefault().Multiplex.Add(multiplex);
+            arg.SummaryAccounts.Where(x => x.AccountName == "MyAccount2").FirstOrDefault().Multiplex.Add(multiplex);
+
 
             var result = ExcelReportGenerator.VoucherStatementExcelReport(arg);
 

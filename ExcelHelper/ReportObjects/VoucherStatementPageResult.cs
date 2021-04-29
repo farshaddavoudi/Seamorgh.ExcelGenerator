@@ -13,7 +13,6 @@ namespace ExcelHelper.VoucherStatementReport
         public string ReportName { get; set; }
         public decimal FinalRemain { get; set; }
 
-        [ExcelReport(Visible = false)]
         public List<VoucherStatementRowResult> RowResult { get; set; }
 
         [ExcelReport(Visible = false)]

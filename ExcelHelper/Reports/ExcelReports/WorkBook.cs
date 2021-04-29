@@ -8,6 +8,7 @@ namespace ExcelHelper.Reports.ExcelReports
         {
             FileName = fileName;
             Path = path;
+            Sheets = new();
         }
 
         public string FileName { get; set; }

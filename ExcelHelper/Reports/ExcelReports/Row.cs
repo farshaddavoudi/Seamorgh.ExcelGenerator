@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 
 namespace ExcelHelper.Reports.ExcelReports
 {
@@ -9,6 +10,7 @@ namespace ExcelHelper.Reports.ExcelReports
         public Row()
         {
             Columns = new List<Column>();
+            MergedCells = new List<string>();
         }
 
         public DataRowCollection Data { get; set; }
@@ -34,7 +36,9 @@ namespace ExcelHelper.Reports.ExcelReports
         {
             get
             {
-                return new Location(EndLocation.X + 1, EndLocation.Y - StartLocation.Y);
+                var y = EndLocation.Y - (EndLocation.Y - StartLocation.Y);
+                return new Location(EndLocation.X + 1, y);
+
             }
         }
 
@@ -49,13 +53,15 @@ namespace ExcelHelper.Reports.ExcelReports
         {
             get
             {
-                return new Location(EndLocation.X + StartLocation.X, EndLocation.Y + 1);
+                var x = EndLocation.X - (EndLocation.X - StartLocation.X);
+                return new Location(x, EndLocation.Y + 1);
+
             }
         }
 
         public Column GetColumn(int X)
         {
-            return Columns[X + 1];
+            return Columns.Where(x => x.Location.X == X).FirstOrDefault();
         }
     }
 }

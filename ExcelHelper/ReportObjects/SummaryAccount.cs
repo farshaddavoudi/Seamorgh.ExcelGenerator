@@ -4,6 +4,10 @@ namespace ExcelHelper.ReportObjects
 {
     public class SummaryAccount : IPrintExcel
     {
+        public SummaryAccount()
+        {
+            Multiplex = new();
+        }
         public string AccountName { get; set; }
 
         [ExcelReport(Visible = false)]

@@ -14,10 +14,10 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             Table table = new();
             ExcelReportBuilder builder = new();
             Border border = new(LineStyle.Continuous, Color.Black);
-            var row = builder.AddRow(new string[] { "نام حساب", "کد حساب" }.GetEnumerator(), new RowPropertyOptions(startLocation));
+            var row = builder.AddRow(new List<string> { "نام حساب", "کد حساب" }, new RowPropertyOptions(startLocation));
             var location = row.NextVerticalLocation;
-            var emtyrow = builder.EmptyRows(new string[] { "", "" }.GetEnumerator(), new RowPropertyOptions(location));
-            location = emtyrow.LastOrDefault().NextHorizontalLocation;
+            var emtyrow = builder.EmptyRows(new List<string> { "", "" }, new RowPropertyOptions(location));
+           // location = emtyrow.LastOrDefault().NextHorizontalLocation;
 
             row.BackColor = Color.DarkBlue;
             row.ForeColor = Color.White;
@@ -37,7 +37,7 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             Border border = new(LineStyle.Continuous, Color.Black);
             foreach (var item in summary)
             {
-                var row=builder.AddRow(item, new RowPropertyOptions(currentLocation));
+                var row=builder.AddRow(summary, new RowPropertyOptions(currentLocation));
                 currentLocation = row.NextHorizontalLocation;
                 row.BackColor = Color.DarkBlue;
                 row.ForeColor = Color.White;
@@ -46,10 +46,10 @@ namespace ExcelHelper.Reports.ExcelReports.Template
                 table.Rows.Add(row);
                 foreach (var result in item.Multiplex)
                 {
-                    var header = builder.AddRow(new string[] { "قبل از تسهیم", "بعد از تسهیم", }.GetEnumerator(), new RowPropertyOptions(currentLocation));
+                    var header = builder.AddRow(new List<string> { "قبل از تسهیم", "بعد از تسهیم", }, new RowPropertyOptions(currentLocation));
                     table.Rows.Add(header);
                     currentLocation = header.NextVerticalLocation;
-                    var childrow = builder.AddRow(result, new RowPropertyOptions(currentLocation));
+                    var childrow = builder.AddRow(item.Multiplex, new RowPropertyOptions(currentLocation));
                     row.BackColor = Color.DarkBlue;
                     row.ForeColor = Color.White;
                     ///
