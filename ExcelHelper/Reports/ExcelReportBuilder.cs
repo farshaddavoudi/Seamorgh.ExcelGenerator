@@ -46,7 +46,7 @@ namespace ExcelHelper.Reports
                 Row row = new();
                 row.StartLocation = new Location(options.StartLocation.X, options.StartLocation.Y);
                 row.EndLocation = new Location(options.StartLocation.X, options.StartLocation.Y);
-                var location =new Location(options.StartLocation.X,options.StartLocation.Y);
+                var location = new Location(options.StartLocation.X, options.StartLocation.Y);
                 foreach (var column in columns)
                 {
                     if (column is string)
@@ -61,13 +61,13 @@ namespace ExcelHelper.Reports
                         {
                             if (column != null)
                             {
-                                row.Columns.Add(AddColumn(column, prop.Name, new ColumnPropertyOptions(new Location(location.X,location.Y))));
+                                row.Columns.Add(AddColumn(column, prop.Name, new ColumnPropertyOptions(new Location(location.X, location.Y))));
                                 location.X++;
                             }
                         }
                     }
                 }
-                row.EndLocation = new Location(location.X-1, location.Y) ;
+                row.EndLocation = new Location(location.X - 1, location.Y);
                 return row;
             }
             return null;
@@ -120,7 +120,7 @@ namespace ExcelHelper.Reports
 
         public Column AddColumn(object cell, string cellName, ColumnPropertyOptions options)
         {
-            if (cell is IEnumerable && !(cell is string)) return null;
+            if (cell is IEnumerable && !(cell is string)) return null; //TODO: Is it OK to say cell is string? Why not change arg param to string? Why Value in "Column" model is object then?
             var col = ConfigColumn(cell, cellName, options);
             return col;
         }
@@ -178,12 +178,12 @@ namespace ExcelHelper.Reports
             switch (cellName)
             {
                 case "Debit":
-                    column.Align = TextAlign.rtl;
+                    column.Align = TextAlign.Rtl;
                     column.AutoFill = true;
                     column.Category = Category.Currency;
                     break;
                 case "Credit":
-                    column.Align = TextAlign.rtl;
+                    column.Align = TextAlign.Rtl;
                     column.AutoFill = false;
                     column.Category = Category.Currency;
                     break;
@@ -198,12 +198,12 @@ namespace ExcelHelper.Reports
             switch (Type.GetTypeCode(cell.GetType()))
             {
                 case TypeCode.Decimal:
-                    column.Align = TextAlign.rtl;
+                    column.Align = TextAlign.Rtl;
                     column.Width = 20;
                     column.Category = Category.Currency;
                     break;
                 case TypeCode.Int32:
-                    column.Align = TextAlign.rtl;
+                    column.Align = TextAlign.Rtl;
                     column.Width = 10;
                     column.Category = Category.Number;
                     break;
@@ -213,7 +213,7 @@ namespace ExcelHelper.Reports
                     column.Category = Category.Text;
                     break;
                 default:
-                    column.Align = TextAlign.rtl;
+                    column.Align = TextAlign.Rtl;
                     column.Category = Category.General;
                     break;
             }
