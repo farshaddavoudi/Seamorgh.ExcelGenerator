@@ -5,9 +5,14 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelHelper", "ExcelHelper\ExcelHelper.csproj", "{9BB85D6B-3998-4575-A1D7-23B0272E9DDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelGenerator", "ExcelGenerator\ExcelGenerator.csproj", "{7F566591-1433-4F77-BC11-24A39694EB1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelGenerator", "ExcelGenerator\ExcelGenerator.csproj", "{7F566591-1433-4F77-BC11-24A39694EB1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApp", "MyApp\MyApp.csproj", "{BD583BE4-E24F-487E-BA39-C75134AB9CC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApp", "MyApp\MyApp.csproj", "{BD583BE4-E24F-487E-BA39-C75134AB9CC0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{4518341C-BBF2-46E3-B995-1075BDC554C6}"
+	ProjectSection(SolutionItems) = preProject
+		Discussions.txt = Discussions.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -13,7 +13,6 @@ namespace MyApp.Controllers
         [HttpGet("ExportExcel")]
         public IActionResult ExportExcel()
         {
-            // TODO: Dear Shahab, please replace my naive example with something real and more practical to build an Excel like you sent to me
             var arg = new VoucherStatementPageResult
             {
                 ReportName = "TestReport",
@@ -21,9 +20,9 @@ namespace MyApp.Controllers
                 {
                     new SummaryAccount {AccountName = "MyAccount"},
                     new SummaryAccount {AccountName = "MyAccount2"}
-                      
+
                 },
-                
+
                 RowResult = new List<VoucherStatementRowResult>
                 {
                     new VoucherStatementRowResult
@@ -40,14 +39,16 @@ namespace MyApp.Controllers
                     }
                 }
             };
+
             Multiplex multiplex = new Multiplex
             {
                 After = 100000,
-                Befor=50000
+                Befor = 50000
             };
-            arg.SummaryAccounts.Where(x=>x.AccountName== "MyAccount").FirstOrDefault().Multiplex.Add(multiplex);
-            arg.SummaryAccounts.Where(x => x.AccountName == "MyAccount2").FirstOrDefault().Multiplex.Add(multiplex);
 
+            arg.SummaryAccounts.FirstOrDefault(x => x.AccountName == "MyAccount")?.Multiplex.Add(multiplex);
+
+            arg.SummaryAccounts.FirstOrDefault(x => x.AccountName == "MyAccount2")?.Multiplex.Add(multiplex);
 
             var result = ExcelReportGenerator.VoucherStatementExcelReport(arg);
 

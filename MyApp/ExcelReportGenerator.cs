@@ -9,7 +9,7 @@ namespace MyApp
     {
         public static ExcelGeneratedFileResult VoucherStatementExcelReport(VoucherStatementPageResult result)
         {
-            var workBook = new WorkBook("FileName", "Path");
+            var workBook = new WorkBook("FileName");
             var sheet1 = SheetTemplates.VoucherStatementTemplate(result);
             workBook.Sheets.Add(sheet1);
 

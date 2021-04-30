@@ -25,13 +25,8 @@ namespace ExcelHelper.Reports.ExcelReports
         public Border OutLineBorder { get; set; }
         public bool IsBordered { get; set; }
         public string Formulas { get; set; }
-        public int ColumnsCount
-        {
-            get
-            {
-                return Columns.Count;
-            }
-        }
+        public int ColumnsCount => Columns.Count;
+
         public Location NextHorizontalLocation
         {
             get
@@ -61,7 +56,7 @@ namespace ExcelHelper.Reports.ExcelReports
 
         public Column GetColumn(int X)
         {
-            return Columns.Where(x => x.Location.X == X).FirstOrDefault();
+            return Columns.FirstOrDefault(x => x.Location.X == X);
         }
     }
 }

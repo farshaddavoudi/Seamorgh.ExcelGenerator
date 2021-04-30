@@ -1,0 +1,6 @@
+- Remove "Path" from "Workbook" model
+
+- Make "Caption" and "Name" of "Sheet" model unified, because they can not be different. More in the link: https://superuser.com/questions/638249/how-to-give-excel-worksheets-duplicate-names-captions
+
+- Do "Caption" belong to "Sheet" scope or "Workbook"?
+
