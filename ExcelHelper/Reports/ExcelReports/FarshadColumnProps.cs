@@ -27,7 +27,7 @@ namespace ExcelHelper.Reports.ExcelReports
 
     public class ColumnWidth
     {
-        public SetColumnWidthType SetColumnWidthType { get; set; } = SetColumnWidthType.AdjustToContents;
+        public SetColumnWidthType SetColumnWidthType { get; set; } = SetColumnWidthType.ExplicitValue;
         public double? Width { get; set; }
     }
 

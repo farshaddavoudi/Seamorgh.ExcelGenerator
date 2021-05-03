@@ -7,7 +7,7 @@ namespace ExcelHelper.Reports.ExcelReports
         public Sheet(string caption, string name)
         {
             Name = name;
-            Caption = caption;
+            Caption = caption; //Resolved TODO: Remove it
         }
 
         /// <summary>
