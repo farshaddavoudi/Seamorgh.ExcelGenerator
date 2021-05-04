@@ -40,14 +40,14 @@ namespace ExcelGenerator
                     var xlSheet = xlWorkbook.Worksheets.Add(sheet.Name);
 
                     //-------------------------------------------
-                    //  Set Columns Width
+                    //  Set Cells Width
                     //-------------------------------------------
                     xlSheet.Column(1).AdjustToContents();
 
                     //-------------------------------------------
-                    //  Map Columns
+                    //  Map Cells
                     //-------------------------------------------
-                    foreach (var column in sheet.Columns)
+                    foreach (var column in sheet.Cells)
                     {
                         // Infer XLDataType from "column"
                         XLDataType xlDataType;
@@ -90,7 +90,7 @@ namespace ExcelGenerator
                         }
 
                         //-------------------------------------------
-                        //  Map column per Columns loop cycle
+                        //  Map column per Cells loop cycle
                         //-------------------------------------------
                         xlSheet
                             .Cell(column.Location.Y, column.Location.X)

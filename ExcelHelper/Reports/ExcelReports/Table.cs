@@ -33,20 +33,20 @@ namespace ExcelHelper.Reports.ExcelReports
             }
         }
 
-        public Column GetColumn(Location location)
+        public Cell GetCell(Location location)
         {
-            return Rows[location.X - 1].Columns[location.Y - 1];
+            return Rows[location.X - 1].Cells[location.Y - 1];
         }
 
-        public List<Column> GetColumns(Location startLocation, Location endLocation)
+        public List<Cell> GetCells(Location startLocation, Location endLocation)
         {
-            List<Column> columns = new();
+            List<Cell> cells = new();
             for (int i = startLocation.Y; i < endLocation.Y; i++)
             {
-                columns.Add(GetColumn(new Location(startLocation.X, i)));
+                cells.Add(GetCell(new Location(startLocation.X, i)));
             }
 
-            return columns;
+            return cells;
         }
     }
 }

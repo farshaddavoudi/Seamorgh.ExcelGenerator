@@ -6,7 +6,7 @@ namespace ExcelHelper.Reports.ExcelReports
     {
         public Location(string x, int y)
         {
-            X = NumberFromExcelColumn(x);
+            X = NumberFromExcelCell(x);
             Y = y;
         }
         public Location(int x, int y)
@@ -18,10 +18,10 @@ namespace ExcelHelper.Reports.ExcelReports
         public int X { get; set; }
         public int Y { get; set; }
 
-        private int NumberFromExcelColumn(string column)
+        private int NumberFromExcelCell(string cell)
         {
             int retVal = 0;
-            string col = column.ToUpper();
+            string col = cell.ToUpper();
             for (int iChar = col.Length - 1; iChar >= 0; iChar--)
             {
                 char colPiece = col[iChar];
@@ -33,23 +33,23 @@ namespace ExcelHelper.Reports.ExcelReports
 
         public string GetName()
         {
-            return $"{GetExcelColumnName(X)}{Y}";
+            return $"{GetExcelCellName(X)}{Y}";
         }
 
-        private string GetExcelColumnName(int columnNumber)
+        private string GetExcelCellName(int cellNumber)
         {
-            int dividend = columnNumber;
-            string columnName = String.Empty;
-            int modulo;
+            int dividend = cellNumber;
+
+            string cellName = string.Empty;
 
             while (dividend > 0)
             {
-                modulo = (dividend - 1) % 26;
-                columnName = Convert.ToChar(65 + modulo).ToString() + columnName;
-                dividend = (int)((dividend - modulo) / 26);
+                var modulo = (dividend - 1) % 26;
+                cellName = Convert.ToChar(65 + modulo) + cellName;
+                dividend = (dividend - modulo) / 26;
             }
 
-            return columnName;
+            return cellName;
         }
     }
 }

@@ -2,9 +2,9 @@
 
 namespace ExcelHelper.Reports.ExcelReports.PropertyOptions
 {
-    public class ColumnPropertyOptions : PropertyOption
+    public class CellsPropertyOptions : PropertyOption
     {
-        public ColumnPropertyOptions(Location startLocation) : base(startLocation) { }
+        public CellsPropertyOptions(Location startLocation) : base(startLocation) { }
         public string EndLocation { get; set; }
         public Size Size { get; set; }
     }

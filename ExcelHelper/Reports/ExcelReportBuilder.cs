@@ -10,27 +10,27 @@ namespace ExcelHelper.Reports
 {
     public interface IExcelReportBuilder
     {
-        WorkBook AddFile(string Path, string filename);
+        WorkBook AddFile(string path, string filename);
         Sheet AddSheet(string title);
         Row AddRow(object list, RowPropertyOptions options);
         List<Row> EmptyRows(object list, RowPropertyOptions options, int count = 1);
         Table AddTable(object rows, TablePropertyOptions options);
-        Column AddColumn(object cell, string cellName, ColumnPropertyOptions options);
-        List<Column> EmptyColumns(ColumnPropertyOptions options, int count = 1);
+        Cell AddCell(object cell, string cellName, CellsPropertyOptions options);
+        List<Cell> EmptyCells(CellsPropertyOptions options, int count = 1);
     }
 
 
     public class ExcelReportBuilder : IExcelReportBuilder
     {
 
-        public WorkBook AddFile(string Path, string filename)
+        public WorkBook AddFile(string path, string filename)
         {
             return null;
         }
 
         public Sheet AddSheet(string title)
         {
-            return new(title, title);
+            return new(title);
         }
 
         /// <summary>
@@ -40,28 +40,28 @@ namespace ExcelHelper.Reports
         /// <returns></returns>
         public Row AddRow(object list, RowPropertyOptions options)
         {
-            if (list is IEnumerable columns)
+            if (list is IEnumerable cells)
             {
 
                 Row row = new();
                 row.StartLocation = new Location(options.StartLocation.X, options.StartLocation.Y);
                 row.EndLocation = new Location(options.StartLocation.X, options.StartLocation.Y);
                 var location = new Location(options.StartLocation.X, options.StartLocation.Y);
-                foreach (var column in columns)
+                foreach (var cell in cells)
                 {
-                    if (column is string)
+                    if (cell is string)
                     {
-                        row.Columns.Add(AddColumn(column, "", new ColumnPropertyOptions(location)));
+                        row.Cells.Add(AddCell(cell, "", new CellsPropertyOptions(location)));
                         location.X++;
                     }
                     else
                     {
-                        PropertyInfo[] props = column.GetType().GetProperties();
+                        PropertyInfo[] props = cell.GetType().GetProperties();
                         foreach (PropertyInfo prop in props)
                         {
-                            if (column != null)
+                            if (cell != null)
                             {
-                                row.Columns.Add(AddColumn(column, prop.Name, new ColumnPropertyOptions(new Location(location.X, location.Y))));
+                                row.Cells.Add(AddCell(cell, prop.Name, new CellsPropertyOptions(new Location(location.X, location.Y))));
                                 location.X++;
                             }
                         }
@@ -75,13 +75,13 @@ namespace ExcelHelper.Reports
 
         private Row EmptyRow(object list, RowPropertyOptions options)
         {
-            if (list is IEnumerable columns)
+            if (list is IEnumerable cells)
             {
                 var location = options.StartLocation;
                 Row row = new();
-                foreach (var column in columns)
+                foreach (var cell in cells)
                 {
-                    row.Columns.Add(AddColumn(string.Empty, string.Empty, new ColumnPropertyOptions(location)));
+                    row.Cells.Add(AddCell(string.Empty, string.Empty, new CellsPropertyOptions(location)));
                     location.X++;
                 }
                 row.EndLocation = location;
@@ -118,74 +118,71 @@ namespace ExcelHelper.Reports
             return null;
         }
 
-        public Column AddColumn(object cell, string cellName, ColumnPropertyOptions options)
+        public Cell AddCell(object cell, string cellName, CellsPropertyOptions options)
         {
-            if (cell is IEnumerable && !(cell is string)) return null; //TODO: Is it OK to say cell is string? Why not change arg param to string? Why Value in "Column" model is object then?
-            var col = ConfigColumn(cell, cellName, options);
+            if (cell is IEnumerable && !(cell is string)) return null; //TODO: Is it OK to say cellObj is string? Why not change arg param to string? Why Value in "Cell" model is object then?
+            var col = ConfigCell(cell, cellName, options);
             return col;
         }
 
-        private Column EmptyColumn(ColumnPropertyOptions options) => ConfigColumn(string.Empty, string.Empty, options);
+        private Cell EmptyCell(CellsPropertyOptions options) => ConfigCell(string.Empty, string.Empty, options);
 
 
-        public List<Column> EmptyColumns(ColumnPropertyOptions options, int count = 1)
+        public List<Cell> EmptyCells(CellsPropertyOptions options, int count = 1)
         {
-            List<Column> columns = new();
+            List<Cell> cells = new();
             for (int i = 0; i < count; i++)
-                columns.Add(EmptyColumn(options));
+                cells.Add(EmptyCell(options));
 
-            return columns;
+            return cells;
         }
 
-        private static Column ConfigColumn(object cell, string cellName, ColumnPropertyOptions options)
+        private static Cell ConfigCell(object cellObj, string cellName, CellsPropertyOptions options)
         {
-            Column column = new(options.StartLocation);
-            column.Location = options.StartLocation;
-            if (cell is string)
+            Cell cell = new(options.StartLocation) { Location = options.StartLocation };
+            if (cellObj is string)
             {
-                column.Value = cell;
-                ConfigByType(cell, column);
-                return column;
+                cell.Value = cellObj;
+                ConfigByType(cellObj, cell);
+                return cell;
             }
-            else
-            {
-                column.Value = GetPropValue(cell, cellName);
-                column.Type = cell.GetType();
-                column.Name = cellName;
 
-                ConfigByType(cell, column);
-                ConfigByName(cell, cellName, column);
-                return column;
-            }
+            cell.Value = GetPropValue(cellObj, cellName);
+            cell.Type = cellObj.GetType();
+            cell.Name = cellName;
+
+            ConfigByType(cellObj, cell);
+            ConfigByName(cellObj, cellName, cell);
+            return cell;
         }
 
-        private static void ConfigByName(object cell, string cellName, Column column)
+        private static void ConfigByName(object cellObj, string cellName, Cell cell)
         {
 
-            PropertyInfo[] props = cell.GetType().GetProperties();
+            PropertyInfo[] props = cellObj.GetType().GetProperties();
             foreach (PropertyInfo prop in props)
             {
                 object[] attrs = prop.GetCustomAttributes(true);
                 foreach (var item in attrs)
                 {
                     var excelAttr = item as ExcelReportAttribute;
-                    if (prop.Name == column.Name)
+                    if (prop.Name == cell.Name)
                     {
-                        column.Visible = excelAttr.Visible;
+                        cell.Visible = excelAttr.Visible;
                     }
                 }
             }
             switch (cellName)
             {
                 case "Debit":
-                    column.Align = TextAlign.Rtl;
-                    column.AutoFill = true;
-                    column.Category = Category.Currency;
+                    cell.Align = TextAlign.Rtl;
+                    cell.AutoFill = true;
+                    cell.Category = Category.Currency;
                     break;
                 case "Credit":
-                    column.Align = TextAlign.Rtl;
-                    column.AutoFill = false;
-                    column.Category = Category.Currency;
+                    cell.Align = TextAlign.Rtl;
+                    cell.AutoFill = false;
+                    cell.Category = Category.Currency;
                     break;
 
                 default:
@@ -193,35 +190,32 @@ namespace ExcelHelper.Reports
             }
         }
 
-        private static void ConfigByType(object cell, Column column)
+        private static void ConfigByType(object cellObj, Cell cell)
         {
-            switch (Type.GetTypeCode(cell.GetType()))
+            switch (Type.GetTypeCode(cellObj.GetType()))
             {
                 case TypeCode.Decimal:
-                    column.Align = TextAlign.Rtl;
-                    column.Width = 20;
-                    column.Category = Category.Currency;
+                    cell.Align = TextAlign.Rtl;
+                    cell.Category = Category.Currency;
                     break;
                 case TypeCode.Int32:
-                    column.Align = TextAlign.Rtl;
-                    column.Width = 10;
-                    column.Category = Category.Number;
+                    cell.Align = TextAlign.Rtl;
+                    cell.Category = Category.Number;
                     break;
                 case TypeCode.String:
-                    column.Width = 40;
-                    column.Wordwrap = true;
-                    column.Category = Category.Text;
+                    cell.Wordwrap = true;
+                    cell.Category = Category.Text;
                     break;
                 default:
-                    column.Align = TextAlign.Rtl;
-                    column.Category = Category.General;
+                    cell.Align = TextAlign.Rtl;
+                    cell.Category = Category.General;
                     break;
             }
         }
 
         private static object GetPropValue(object src, string propName)
         {
-            return src.GetType().GetProperty(propName).GetValue(src, null);
+            return src.GetType().GetProperty(propName)?.GetValue(src, null);
         }
     }
 }

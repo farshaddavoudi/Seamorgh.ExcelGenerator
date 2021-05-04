@@ -9,7 +9,7 @@ namespace ExcelHelper.Reports.ExcelReports
     {
         public Row()
         {
-            Columns = new List<Column>();
+            Cells = new List<Cell>();
             MergedCells = new List<string>();
         }
 
@@ -18,14 +18,14 @@ namespace ExcelHelper.Reports.ExcelReports
         public Location EndLocation { get; set; }
         public Color BackColor { get; set; } = Color.White;
         public Color ForeColor { get; set; } = Color.Black;
-        public List<Column> Columns { get; set; }
+        public List<Cell> Cells { get; set; }
         public int Height { get; set; }
         public List<string> MergedCells { get; set; }
         public Border InLineBorder { get; set; }
         public Border OutLineBorder { get; set; }
         public bool IsBordered { get; set; }
         public string Formulas { get; set; }
-        public int ColumnsCount => Columns.Count;
+        public int CellsCount => Cells.Count;
 
         public Location NextHorizontalLocation
         {
@@ -37,11 +37,11 @@ namespace ExcelHelper.Reports.ExcelReports
             }
         }
 
-        public Column AddColumn()
+        public Cell AddCell()
         {
-            Column column = new(NextVerticalLocation);
-            Columns.Add(column);
-            return column;
+            Cell cell = new(NextVerticalLocation);
+            Cells.Add(cell);
+            return cell;
         }
 
         public Location NextVerticalLocation
@@ -54,9 +54,9 @@ namespace ExcelHelper.Reports.ExcelReports
             }
         }
 
-        public Column GetColumn(int X)
+        public Cell GetCell(int X)
         {
-            return Columns.FirstOrDefault(x => x.Location.X == X);
+            return Cells.FirstOrDefault(x => x.Location.X == X);
         }
     }
 }

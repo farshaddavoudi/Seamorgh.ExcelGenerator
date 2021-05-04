@@ -53,10 +53,10 @@ namespace ExcelHelper.Reports.ExcelReports.Template
                     row.BackColor = Color.DarkBlue;
                     row.ForeColor = Color.White;
                     ///
-                    ///Adding Column For Formulas
+                    ///Adding Cell For Formulas
                     ///
-                    childrow.Formulas = $"{childrow.GetColumn(childrow.StartLocation.X).Location.GetName()}:{childrow.GetColumn(childrow.EndLocation.X).Location.GetName()}";
-                    var sumcolum = childrow.AddColumn();
+                    childrow.Formulas = $"{childrow.GetCell(childrow.StartLocation.X).Location.GetName()}:{childrow.GetCell(childrow.EndLocation.X).Location.GetName()}";
+                    var sumcolum = childrow.AddCell();
                     sumcolum.Value = childrow.Formulas;
                     ////////
                     ///
