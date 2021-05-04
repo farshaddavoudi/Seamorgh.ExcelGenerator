@@ -39,12 +39,48 @@ namespace ExcelGenerator
                 //-------------------------------------------
                 foreach (var sheet in workBook.Sheets)
                 {
+                    // Set name
                     var xlSheet = xlWorkbook.Worksheets.Add(sheet.Name);
 
+                    // Set direction
+                    if (sheet.WSProps.IsRightToLeft is not null)
+                        xlSheet.RightToLeft = (bool)sheet.WSProps.IsRightToLeft;
+
+                    // Set default column width
+                    if (sheet.WSProps.DefaultColumnWidth is not null)
+                        xlSheet.ColumnWidth = (double)sheet.WSProps.DefaultColumnWidth;
+
+                    // Set default row height
+                    if (sheet.WSProps.DefaultRowHeight is not null)
+                        xlSheet.RowHeight = (double)sheet.WSProps.DefaultRowHeight;
+
+                    // Set visibility
+                    xlSheet.Visibility = sheet.WSProps.Visibility switch
+                    {
+                        SheetVisibility.Hidden => XLWorksheetVisibility.Hidden,
+                        SheetVisibility.VeryHidden => XLWorksheetVisibility.VeryHidden,
+                        _ => XLWorksheetVisibility.Visible
+                    };
+
                     //-------------------------------------------
-                    //  Set Cells Width
+                    //  Set Columns custom Width
                     //-------------------------------------------
-                    xlSheet.Column(1).AdjustToContents();
+                    foreach (var colProps in sheet.ColumnPropsList)
+                    {
+                        if (colProps.Width is not null)
+                        {
+                            if (colProps.Width.CalculateType == ColumnWidthCalculateType.AdjustToContents)
+                                xlSheet.Column(colProps.ColumnNumber).AdjustToContents();
+
+                            else
+                                xlSheet.Column(colProps.ColumnNumber).Width = (double)colProps.Width.Value!;
+                        }
+
+                        if (colProps.IsHidden)
+                            xlSheet.Column(colProps.ColumnNumber).Hide();
+                    }
+
+                    // TODO: Until here
 
                     //-------------------------------------------
                     //  Map Cells

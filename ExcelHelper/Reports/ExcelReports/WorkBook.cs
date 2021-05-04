@@ -13,7 +13,7 @@ namespace ExcelHelper.Reports.ExcelReports
         public string Path { get; set; } //TODO: Remove this property
         public List<Sheet> Sheets { get; set; } = new();
 
-        //TODO: Explain 
+        // TODO: New Property 
         public WBProps WBProps { get; set; } = new();
     }
 }
