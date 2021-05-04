@@ -1,7 +1,6 @@
 ﻿using ClosedXML.Excel;
 using ExcelHelper.Reports.ExcelReports;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -11,14 +10,17 @@ namespace ExcelGenerator
     {
         public static ExcelGeneratedFileResult GenerateExcel(WorkBook workBook)
         {
-            var fakeReport = new List<string> { "Ahmad", "Zabih", "Ramin", "Marzieh", "Reza", "Ahmad" };
-
             try
             {
                 //-------------------------------------------
                 //  Create Workbook (integrated with using statement)
                 //-------------------------------------------
-                using var xlWorkbook = new XLWorkbook { RightToLeft = true };
+                using var xlWorkbook = new XLWorkbook
+                {
+                    RightToLeft = workBook.WBProps.IsRightToLeft,
+                    ColumnWidth = workBook.WBProps.DefaultColumnWidth,
+                    RowHeight = workBook.WBProps.DefaultRowHeight
+                };
 
                 // Check sheet names are unique
                 var sheetNames = workBook.Sheets.Select(s => s.Name).ToList();

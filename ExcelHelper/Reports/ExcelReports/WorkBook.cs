@@ -12,5 +12,8 @@ namespace ExcelHelper.Reports.ExcelReports
         public string FileName { get; set; }
         public string Path { get; set; } //TODO: Remove this property
         public List<Sheet> Sheets { get; set; } = new();
+
+        //TODO: Explain 
+        public WBProps WBProps { get; set; } = new();
     }
 }
