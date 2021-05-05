@@ -1,14 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ExcelHelper.Reports.ExcelReports
 {
     public class Sheet
     {
+        public Sheet()
+        {
+
+        }
+
         public Sheet(string name)
         {
             Name = name;
         }
 
+        [Required(ErrorMessage = "Sheet Name is required")]
         public string Name { get; set; }
         public List<Row> Rows { get; set; } = new();
         public List<ColumnProps> ColumnPropsList { get; set; } = new();

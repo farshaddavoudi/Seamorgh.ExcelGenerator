@@ -16,7 +16,7 @@ namespace ExcelHelper.Reports.ExcelReports
         public Location Location { get; set; }
         public bool Wordwrap { get; set; }
         public TextAlign Align { get; set; } = TextAlign.Rtl;
-        public Category Category { get; set; } = Category.General; //TODO: I didn't understand this property. What is going to do?
+        public Category Category { get; set; } = Category.General;
         public bool Visible { get; set; } = true; //Resolved TODO: Move this to "FarshadColumnWidth" class
         public bool AutoFill { get; set; } //TODO: What is AutoFill property?
     }
@@ -25,19 +25,18 @@ namespace ExcelHelper.Reports.ExcelReports
     {
         Rtl = 0,
         Ltr = 1,
-        Center = 2
+        Center = 2,
+        Justify = 3
     }
 
     public enum Category
     {
         General,
-        Boolean,
         Number,
         Currency,
-        Date,
-        Time,
-        Percentage,
+        MiladiDate,
+        SolarHijriDate, //Will convert Miladi date to Solar Hijri e.g. 1400/02/02
         Text,
-        Custom
+        Percentage
     }
 }

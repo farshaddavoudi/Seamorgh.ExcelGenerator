@@ -50,7 +50,10 @@ namespace MyApp.Controllers
 
             arg.SummaryAccounts.FirstOrDefault(x => x.AccountName == "MyAccount2")?.Multiplex.Add(multiplex);
 
-            var result = ExcelReportGenerator.VoucherStatementExcelReport(arg);
+            var result2 = ExcelReportGenerator.VoucherStatementExcelReport(arg);
+
+
+            var result = ExcelReportGenerator.TestReport();
 
             return File(result.Content, result.ContentType, result.FileName);
         }

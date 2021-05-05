@@ -5,11 +5,15 @@ namespace ExcelHelper.Reports.ExcelReports
 {
     public class ColumnProps : IValidatableObject
     {
-        public int ColumnNumber { get; set; }
+        [Required(ErrorMessage = "ColumnNo is required")]
+        public int ColumnNo { get; set; }
         public ColumnWidth Width { get; set; } = null; //If not specified, default would be considered
         public bool IsHidden { get; set; } = false;
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            if (ColumnNo == default)
+                yield return new ValidationResult("ColumnNo is required", new List<string> { nameof(ColumnNo) });
+
             if (Width is not null)
             {
                 if (Width.CalculateType == ColumnWidthCalculateType.ExplicitValue && Width.Value is null)
@@ -28,6 +32,16 @@ namespace ExcelHelper.Reports.ExcelReports
 
     public class ColumnWidth
     {
+        public ColumnWidth()
+        {
+
+        }
+
+        public ColumnWidth(double width)
+        {
+            Value = width;
+        }
+
         public ColumnWidthCalculateType CalculateType { get; set; } = ColumnWidthCalculateType.ExplicitValue;
         public double? Value { get; set; }
     }

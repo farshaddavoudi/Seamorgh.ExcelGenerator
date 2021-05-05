@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ExcelHelper.Reports.ExcelReports
 {
     public class WorkBook
     {
-        public WorkBook(string fileName)
-        {
-            FileName = fileName;
-        }
-
+        [Required(ErrorMessage = "FileName is required")]
         public string FileName { get; set; }
         public string Path { get; set; } //TODO: Remove this property
         public List<Sheet> Sheets { get; set; } = new();

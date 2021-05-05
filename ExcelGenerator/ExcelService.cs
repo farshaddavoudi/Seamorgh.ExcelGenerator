@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DNTPersianUtils.Core;
 using ExcelHelper.Reports.ExcelReports;
 using System;
 using System.IO;
@@ -70,45 +71,72 @@ namespace ExcelGenerator
                         if (colProps.Width is not null)
                         {
                             if (colProps.Width.CalculateType == ColumnWidthCalculateType.AdjustToContents)
-                                xlSheet.Column(colProps.ColumnNumber).AdjustToContents();
+                                xlSheet.Column(colProps.ColumnNo).AdjustToContents();
 
                             else
-                                xlSheet.Column(colProps.ColumnNumber).Width = (double)colProps.Width.Value!;
+                                xlSheet.Column(colProps.ColumnNo).Width = (double)colProps.Width.Value!;
                         }
 
                         if (colProps.IsHidden)
-                            xlSheet.Column(colProps.ColumnNumber).Hide();
+                            xlSheet.Column(colProps.ColumnNo).Hide();
                     }
 
-                    // TODO: Until here
+                    // xlSheet.Columns().Style.Fill.BackgroundColor = XLColor.White; // without this line it doe not work
+                    xlSheet.Columns().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center; //TODO: Not working. Check below ToDO. Cell align will override this. fix
 
                     //-------------------------------------------
                     //  Map Cells
                     //-------------------------------------------
-                    foreach (var column in sheet.Cells)
+                    foreach (var cell in sheet.Cells)
                     {
-                        // Infer XLDataType from "column"
-                        XLDataType xlDataType;
-                        switch (column.Category)
+                        // Infer XLDataType and value from "cell" category
+                        XLDataType? xlDataType;
+                        object cellValue = cell.Value;
+
+                        switch (cell.Category)
                         {
                             case Category.Number:
                                 xlDataType = XLDataType.Number;
                                 break;
-                            case Category.Date:
-                                xlDataType = XLDataType.DateTime;
+
+                            case Category.Percentage:
+                                xlDataType = XLDataType.Text;
+                                cellValue = $"{cellValue}%";
                                 break;
 
-                            // TODO: Complete the rest after finding out what is Category about?
-
-                            default:
+                            case Category.Currency:
                                 xlDataType = XLDataType.Text;
+                                if (cellValue.IsNumber() is false)
+                                    throw new Exception("Cell with Currency category should be Number type");
+                                cellValue = Convert.ToDecimal(cellValue).ToString("##,###");
+                                break;
+
+                            case Category.MiladiDate:
+                                xlDataType = XLDataType.DateTime;
+                                if (cellValue is not DateTime)
+                                    throw new Exception("Cell with MiladiDate category should be DateTime type");
+                                break;
+
+                            case Category.SolarHijriDate:
+                                if (cellValue is not DateTime)
+                                    throw new Exception("Cell with SolarHijriDate category should be DateTime type");
+                                cellValue = Convert.ToDateTime(cellValue).ToShortPersianDateString();
+                                xlDataType = XLDataType.Text;
+                                break;
+
+                            case Category.Text:
+                                xlDataType = XLDataType.Text;
+                                break;
+
+                            default: // = Category.General
+                                xlDataType = null;
                                 break;
                         }
 
                         // Infer XLAlignment from "column"
                         XLAlignmentHorizontalValues xlAlignmentHorizontalValues;
 
-                        switch (column.Align)
+                        switch (cell.Align)
                         {
                             case TextAlign.Center:
                                 xlAlignmentHorizontalValues = XLAlignmentHorizontalValues.Center;
@@ -130,12 +158,14 @@ namespace ExcelGenerator
                         //-------------------------------------------
                         //  Map column per Cells loop cycle
                         //-------------------------------------------
-                        xlSheet
-                            .Cell(column.Location.Y, column.Location.X)
-                            .SetDataType(xlDataType)
-                            .SetValue(column.Value)
-                            .Style.Alignment.SetWrapText(column.Wordwrap)
-                            .Alignment.SetHorizontal(xlAlignmentHorizontalValues);
+                        var locationCell = xlSheet.Cell(cell.Location.Y, cell.Location.X);
+
+                        locationCell.SetValue(cellValue)
+                        .Style.Alignment.SetWrapText(cell.Wordwrap)
+                        .Alignment.SetHorizontal(xlAlignmentHorizontalValues); //TODO: Should be conditional, maybe it is set in ColumnProps
+
+                        if (xlDataType is not null)
+                            locationCell.SetDataType((XLDataType)xlDataType);
                     }
                 }
 
