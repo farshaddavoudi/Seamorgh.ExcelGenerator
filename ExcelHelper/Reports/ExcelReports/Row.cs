@@ -13,7 +13,6 @@ namespace ExcelHelper.Reports.ExcelReports
             MergedCells = new List<string>();
         }
 
-        public DataRowCollection Data { get; set; }
         public Location StartLocation { get; set; }
         public Location EndLocation { get; set; }
         public Color BackColor { get; set; } = Color.White;

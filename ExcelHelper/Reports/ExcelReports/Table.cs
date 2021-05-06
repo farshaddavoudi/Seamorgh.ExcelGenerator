@@ -6,7 +6,6 @@ namespace ExcelHelper.Reports.ExcelReports
 {
     public class Table
     {
-        public DataTable Data { get; set; }
         public List<Row> Rows { get; set; } = new();
         public Location StartLocation { get; set; }
         public Location EndLocation { get; set; }

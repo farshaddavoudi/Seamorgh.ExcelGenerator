@@ -9,7 +9,6 @@ namespace ExcelHelper.Reports.ExcelReports
         {
             Location = location;
         }
-        internal DataColumn Data { get; set; }
         public string Name { get; set; } //TODO: Add Name property somehow as column (cell) identifier
         internal Type Type { get; set; }
         public object Value { get; set; }
