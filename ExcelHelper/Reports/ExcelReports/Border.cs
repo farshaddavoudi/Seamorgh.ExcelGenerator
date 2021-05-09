@@ -11,6 +11,6 @@ namespace ExcelHelper.Reports.ExcelReports
         }
 
         public LineStyle LineStyle { get; set; }
-        public Color Color { get; set; } 
+        public Color Color { get; set; }
     }
 }

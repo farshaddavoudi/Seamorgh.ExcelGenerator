@@ -18,7 +18,7 @@ namespace ExcelHelper.Reports.ExcelReports
         [Required(ErrorMessage = "Sheet Name is required")]
         public string Name { get; set; }
         public List<Row> Rows { get; set; } = new();
-        public List<ColumnProps> ColumnPropsList { get; set; } = new();
+        public List<ColumnProps> Columns { get; set; } = new();
         public List<Cell> Cells { get; set; } = new();
         public List<Table> Tables { get; set; } = new();
         public List<string> MergedCells { get; set; } = new();

@@ -3,6 +3,7 @@ using ExcelHelper.Reports.ExcelReports;
 using ExcelHelper.Reports.ExcelReports.Template;
 using ExcelHelper.VoucherStatementReport;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace MyApp
 {
@@ -27,18 +28,35 @@ namespace MyApp
                 Sheets = new List<Sheet> { new()
                     {
                         Name = "MySheet",
-                        ColumnPropsList = new List<ColumnProps>
+                        Columns = new List<ColumnProps>
                         {
                             new (){ColumnNo = 3,Width=new ColumnWidth(10)},
                             new(){ColumnNo = 1,Width = new ColumnWidth{CalculateType = ColumnWidthCalculateType.AdjustToContents}}
                         },
+                        Rows = new List<Row>
+                        {
+                            new()
+                            {
+                                Cells = new List<Cell>
+                                {
+                                    new(new Location(3,2)){Value = "فرشاد", Category =Category.Text, TextAlign = TextAlign.Right}
+                                },
+                                MergedCellsList = new(){"C2:D2"},
+                                StartLocation = new Location(2,2),
+                                EndLocation = new Location(4,2),
+                                ForeColor = Color.BlueViolet,
+                                BackColor = Color.AliceBlue,
+                                OutsideBorder = new Border(LineStyle.DashDotDot, Color.Red)
+                            }
+    },
                         Cells = new List<Cell>
                         {
-                            new Cell(new Location(1,1)){Value = 11, Category = Category.Percentage, TextAlign = TextAlign.Left},
-                            new Cell(new Location(2,1)){Value = 112343, Category = Category.Currency},
-                            new Cell(new Location(3,1)){Value = 112},
-                            new Cell(new Location(1,2)){Value = 211, TextAlign = TextAlign.Center},
-                            new Cell(new Location(2,2)){Value = 212},
+                            new Cell(new Location("A",1)){Value = 11, Category = Category.Percentage, TextAlign = TextAlign.Left
+},
+                            new Cell(new Location(2, 1)) { Value = 112343, Category = Category.Currency },
+                            new Cell(new Location("D", 1)) { Value = 112 },
+                            new Cell(new Location(1, 2)) { Value = 211, TextAlign = TextAlign.Center },
+                            new Cell(new Location(2, 2)) { Value = 212 },
                         }
 
                     }

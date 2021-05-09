@@ -2,8 +2,11 @@
 {
     public enum LineStyle
     {
-        Continuous,
-        Dot,
+        Thick,
+        Thin,
+        Dotted,
+        Dashed,
+        DashDot,
         DashDotDot,
         SlantDashDot,
         Double

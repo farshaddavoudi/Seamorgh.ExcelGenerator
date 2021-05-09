@@ -26,7 +26,7 @@ namespace ExcelHelper.Reports.ExcelReports.Template
 
             //var accounts=TableTemplates.Accounts(result.Accounts);
 
-            Border border = new(LineStyle.Continuous, Color.Black);
+            Border border = new(LineStyle.Thick, Color.Black);
             row.BackColor = Color.Gray;
             row2.BackColor = Color.Gray;
             table.InLineBorder = border;

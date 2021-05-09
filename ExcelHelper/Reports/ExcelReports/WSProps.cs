@@ -4,6 +4,8 @@
     {
         public bool? IsRightToLeft { get; set; } = null;
 
+        public TextAlign DefaultTextAlign { get; set; } = TextAlign.Right;
+
         /// <summary>
         /// Default column width for this worksheet.
         /// </summary>
