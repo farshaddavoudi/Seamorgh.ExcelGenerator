@@ -175,13 +175,13 @@ namespace ExcelHelper.Reports
             switch (cellName)
             {
                 case "Debit":
-                    cell.Align = TextAlign.Rtl;
-                    cell.AutoFill = true;
+                    cell.TextAlign = TextAlign.Right;
+                    cell.AutoFill = true; //TODO: Discussion with Shahab to remove it
                     cell.Category = Category.Currency;
                     break;
                 case "Credit":
-                    cell.Align = TextAlign.Rtl;
-                    cell.AutoFill = false;
+                    cell.TextAlign = TextAlign.Right;
+                    cell.AutoFill = false; //TODO: Discussion with Shahab to remove it
                     cell.Category = Category.Currency;
                     break;
 
@@ -195,11 +195,11 @@ namespace ExcelHelper.Reports
             switch (Type.GetTypeCode(cellObj.GetType()))
             {
                 case TypeCode.Decimal:
-                    cell.Align = TextAlign.Rtl;
+                    cell.TextAlign = TextAlign.Right;
                     cell.Category = Category.Currency;
                     break;
                 case TypeCode.Int32:
-                    cell.Align = TextAlign.Rtl;
+                    cell.TextAlign = TextAlign.Right;
                     cell.Category = Category.Number;
                     break;
                 case TypeCode.String:
@@ -207,7 +207,7 @@ namespace ExcelHelper.Reports
                     cell.Category = Category.Text;
                     break;
                 default:
-                    cell.Align = TextAlign.Rtl;
+                    cell.TextAlign = TextAlign.Right;
                     cell.Category = Category.General;
                     break;
             }

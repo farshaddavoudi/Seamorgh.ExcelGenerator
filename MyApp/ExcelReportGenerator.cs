@@ -27,19 +27,20 @@ namespace MyApp
                 Sheets = new List<Sheet> { new()
                     {
                         Name = "MySheet",
-                        Cells = new List<Cell>
-                        {
-                            new Cell(new Location(1,1)){Value = 11, Category = Category.Percentage},
-                            new Cell(new Location(2,1)){Value = 112343, Category = Category.Currency},
-                            new Cell(new Location(3,1)){Value = 112},
-                            new Cell(new Location(1,2)){Value = 211},
-                            new Cell(new Location(2,2)){Value = 212},
-                        },
                         ColumnPropsList = new List<ColumnProps>
                         {
                             new (){ColumnNo = 3,Width=new ColumnWidth(10)},
                             new(){ColumnNo = 1,Width = new ColumnWidth{CalculateType = ColumnWidthCalculateType.AdjustToContents}}
+                        },
+                        Cells = new List<Cell>
+                        {
+                            new Cell(new Location(1,1)){Value = 11, Category = Category.Percentage, TextAlign = TextAlign.Left},
+                            new Cell(new Location(2,1)){Value = 112343, Category = Category.Currency},
+                            new Cell(new Location(3,1)){Value = 112},
+                            new Cell(new Location(1,2)){Value = 211, TextAlign = TextAlign.Center},
+                            new Cell(new Location(2,2)){Value = 212},
                         }
+
                     }
                 }
             };

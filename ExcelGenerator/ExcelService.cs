@@ -63,11 +63,24 @@ namespace ExcelGenerator
                         _ => XLWorksheetVisibility.Visible
                     };
 
+                    // TODO: Make it dynamic by transfer it to Sheet model
+                    xlSheet.Columns().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right; //Default align right for RTL direction
+
                     //-------------------------------------------
                     //  Set Columns custom Width
                     //-------------------------------------------
+                    // Infer XLAlignment from "ColumnProp"
                     foreach (var colProps in sheet.ColumnPropsList)
                     {
+                        var columnAlignmentHorizontalValue = colProps.TextAlign switch
+                        {
+                            TextAlign.Center => XLAlignmentHorizontalValues.Center,
+                            TextAlign.Justify => XLAlignmentHorizontalValues.Justify,
+                            TextAlign.Left => XLAlignmentHorizontalValues.Left,
+                            TextAlign.Right => XLAlignmentHorizontalValues.Right,
+                            _ => throw new ArgumentOutOfRangeException()
+                        };
+
                         if (colProps.Width is not null)
                         {
                             if (colProps.Width.CalculateType == ColumnWidthCalculateType.AdjustToContents)
@@ -79,16 +92,19 @@ namespace ExcelGenerator
 
                         if (colProps.IsHidden)
                             xlSheet.Column(colProps.ColumnNo).Hide();
-                    }
 
-                    // xlSheet.Columns().Style.Fill.BackgroundColor = XLColor.White; // without this line it doe not work
-                    xlSheet.Columns().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center; //TODO: Not working. Check below ToDO. Cell align will override this. fix
+                        xlSheet.Column(colProps.ColumnNo).Style.Alignment
+                            .SetHorizontal(columnAlignmentHorizontalValue);
+                    }
 
                     //-------------------------------------------
                     //  Map Cells
                     //-------------------------------------------
                     foreach (var cell in sheet.Cells)
                     {
+                        if (cell.Visible is false)
+                            continue;
+
                         // Infer XLDataType and value from "cell" category
                         XLDataType? xlDataType;
                         object cellValue = cell.Value;
@@ -133,27 +149,15 @@ namespace ExcelGenerator
                                 break;
                         }
 
-                        // Infer XLAlignment from "column"
-                        XLAlignmentHorizontalValues xlAlignmentHorizontalValues;
-
-                        switch (cell.Align)
+                        // Infer XLAlignment from "cell"
+                        XLAlignmentHorizontalValues? cellAlignmentHorizontalValue = cell.TextAlign switch
                         {
-                            case TextAlign.Center:
-                                xlAlignmentHorizontalValues = XLAlignmentHorizontalValues.Center;
-                                break;
-
-                            case TextAlign.Ltr:
-                                xlAlignmentHorizontalValues = XLAlignmentHorizontalValues.Left;
-                                break;
-
-                            case TextAlign.Rtl:
-                                xlAlignmentHorizontalValues = XLAlignmentHorizontalValues.Right;
-                                break;
-
-                            default:
-                                xlAlignmentHorizontalValues = XLAlignmentHorizontalValues.Justify;
-                                break;
-                        }
+                            TextAlign.Center => XLAlignmentHorizontalValues.Center,
+                            TextAlign.Left => XLAlignmentHorizontalValues.Left,
+                            TextAlign.Right => XLAlignmentHorizontalValues.Right,
+                            TextAlign.Justify => XLAlignmentHorizontalValues.Justify,
+                            _ => null
+                        };
 
                         //-------------------------------------------
                         //  Map column per Cells loop cycle
@@ -161,8 +165,10 @@ namespace ExcelGenerator
                         var locationCell = xlSheet.Cell(cell.Location.Y, cell.Location.X);
 
                         locationCell.SetValue(cellValue)
-                        .Style.Alignment.SetWrapText(cell.Wordwrap)
-                        .Alignment.SetHorizontal(xlAlignmentHorizontalValues); //TODO: Should be conditional, maybe it is set in ColumnProps
+                            .Style.Alignment.SetWrapText(cell.Wordwrap);
+
+                        if (cellAlignmentHorizontalValue is not null)
+                            locationCell.Style.Alignment.SetHorizontal((XLAlignmentHorizontalValues)cellAlignmentHorizontalValue!);
 
                         if (xlDataType is not null)
                             locationCell.SetDataType((XLDataType)xlDataType);

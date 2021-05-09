@@ -8,6 +8,7 @@ namespace ExcelHelper.Reports.ExcelReports
         [Required(ErrorMessage = "ColumnNo is required")]
         public int ColumnNo { get; set; }
         public ColumnWidth Width { get; set; } = null; //If not specified, default would be considered
+        public TextAlign TextAlign { get; set; } = TextAlign.Right; //Default RTL direction
         public bool IsHidden { get; set; } = false;
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -43,6 +44,7 @@ namespace ExcelHelper.Reports.ExcelReports
         }
 
         public ColumnWidthCalculateType CalculateType { get; set; } = ColumnWidthCalculateType.ExplicitValue;
+
         public double? Value { get; set; }
     }
 }
