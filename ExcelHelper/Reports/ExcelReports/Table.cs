@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.Data;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace ExcelHelper.Reports.ExcelReports
 {
-    public class Table
+    public class Table : IValidatableObject
     {
         public List<Row> Rows { get; set; } = new();
-        public Location StartLocation { get; set; }
-        public Location EndLocation { get; set; }
-        public Border InLineBorder { get; set; }
-        public Border OutLineBorder { get; set; }
-        public bool IsBordered { get; set; }
+        public Location StartLocation { get; set; } //TODO: Discuss with Shahab. The Rows has StartLocation itself, which one should be considered?
+        //TODO: StartLocation and EndLocation for Table model are critical and should exist and be exact to create desired result
+        public Location EndLocation { get; set; } //TODO: above question
+        public Border InLineBorder { get; set; } //TODO: What it is? Inside border can be set on cells or columns or rows
+        public Border OutsideBorder { get; set; }
+        public bool IsBordered { get; set; } //TODO? What is this? isn't it the default one?
         public List<string> MergedCells { get; set; } = new();
         public int RowsCount => Rows.Count;
 
@@ -46,6 +47,13 @@ namespace ExcelHelper.Reports.ExcelReports
             }
 
             return cells;
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (false)
+                yield return new ValidationResult("");
+            // TODO: Discuess with Shahab. Shouldn't Rows in a Table have common features like Same StartLocation.X and things like
         }
     }
 }

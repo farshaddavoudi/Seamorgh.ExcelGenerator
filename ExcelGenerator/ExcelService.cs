@@ -104,76 +104,40 @@ namespace ExcelGenerator
                     }
 
                     //-------------------------------------------
+                    //  Map Tables
+                    //-------------------------------------------
+                    foreach (var table in sheet.Tables)
+                    {
+                        foreach (var tableRow in table.Rows)
+                        {
+                            xlSheet.ConfigureRow(tableRow);
+                        }
+
+                        var tableRange = xlSheet.Range(table.StartLocation.Y, table.StartLocation.X,
+                            table.EndLocation.Y, table.EndLocation.X);
+
+                        XLBorderStyleValues? outsideBorder = GetXlBorderLineStyle(table.OutsideBorder.LineStyle);
+
+                        if (outsideBorder is not null)
+                        {
+                            tableRange.Style.Border.SetOutsideBorder((XLBorderStyleValues)outsideBorder);
+                            tableRange.Style.Border.SetOutsideBorderColor(XLColor.FromColor(table.OutsideBorder.Color));
+                        }
+
+                        // Apply merges here
+                        foreach (var mergedCells in table.MergedCells)
+                        {
+                            xlSheet.Range(mergedCells).Merge();
+                        }
+
+                    }
+
+                    //-------------------------------------------
                     //  Map Rows 
                     //-------------------------------------------
                     foreach (var row in sheet.Rows)
                     {
-                        foreach (var rowCell in row.Cells)
-                        {
-                            if (rowCell.Visible is false)
-                                continue;
-
-                            xlSheet.ConfigureCell(rowCell);
-                        }
-
-                        // Configure merged cells in the row
-                        foreach (var cellsToMerge in row.MergedCellsList)
-                        {
-                            // CellsToMerge example is "B2:D2"
-                            xlSheet.Range(cellsToMerge).Row(1).Merge();
-                        }
-
-                        if (row.Cells.Count != 0)
-                        {
-                            if (row.StartLocation is not null && row.EndLocation is not null)
-                            {
-                                var xlRow = xlSheet.Row(row.Cells.First().Location.Y);
-                                if (row.Height is not null)
-                                    xlRow.Height = (double)row.Height;
-
-                                var xlRowRange = xlSheet.Range(row.StartLocation.Y, row.StartLocation.X, row.EndLocation.Y,
-                                    row.EndLocation.X);
-                                xlRowRange.Style.Font.SetFontColor(XLColor.FromColor(row.ForeColor));
-                                xlRowRange.Style.Fill.SetBackgroundColor(XLColor.FromColor(row.BackColor));
-
-                                XLBorderStyleValues? outsideBorder = outsideBorder = row.OutsideBorder.LineStyle switch
-                                {
-                                    LineStyle.DashDotDot => XLBorderStyleValues.DashDotDot,
-                                    LineStyle.Thick => XLBorderStyleValues.Thick,
-                                    LineStyle.Thin => XLBorderStyleValues.Thin,
-                                    LineStyle.Dotted => XLBorderStyleValues.Dotted,
-                                    LineStyle.Double => XLBorderStyleValues.Double,
-                                    LineStyle.DashDot => XLBorderStyleValues.DashDot,
-                                    LineStyle.Dashed => XLBorderStyleValues.Dashed,
-                                    LineStyle.SlantDashDot => XLBorderStyleValues.SlantDashDot,
-                                    _ => null
-                                };
-
-                                if (outsideBorder is not null)
-                                {
-                                    xlRowRange.Style.Border.SetOutsideBorder((XLBorderStyleValues)outsideBorder);
-                                    xlRowRange.Style.Border.SetOutsideBorderColor(
-                                        XLColor.FromColor(row.OutsideBorder.Color));
-                                }
-                                //xlRowRange.Style.Border.SetInsideBorder(XLBorderStyleValues.Thick);
-                                //xlRowRange.Style.Border.SetTopBorder(XLBorderStyleValues.Thick);
-                                //xlRowRange.Style.Border.SetRightBorder(XLBorderStyleValues.DashDotDot);
-                            }
-                            else
-                            {
-                                var xlRow = xlSheet.Row(row.Cells.First().Location.Y);
-                                if (row.Height is not null)
-                                    xlRow.Height = (double)row.Height;
-                                xlRow.Style.Font.SetFontColor(XLColor.FromColor(row.ForeColor));
-                                xlRow.Style.Fill.SetBackgroundColor(XLColor.FromColor(row.BackColor));
-                                xlRow.Style.Border.SetOutsideBorder(XLBorderStyleValues.Dotted);
-                                xlRow.Style.Border.SetInsideBorder(XLBorderStyleValues.Thick);
-                                xlRow.Style.Border.SetTopBorder(XLBorderStyleValues.Thick);
-                                xlRow.Style.Border.SetRightBorder(XLBorderStyleValues.DashDotDot);
-                            }
-
-
-                        }
+                        xlSheet.ConfigureRow(row);
                     }
 
                     //-------------------------------------------
@@ -271,6 +235,79 @@ namespace ExcelGenerator
             if (xlDataType is not null)
                 locationCell.SetDataType((XLDataType)xlDataType);
 
+        }
+
+        private static void ConfigureRow(this IXLWorksheet xlSheet, Row row)
+        {
+            foreach (var rowCell in row.Cells)
+            {
+                if (rowCell.Visible is false)
+                    continue;
+
+                xlSheet.ConfigureCell(rowCell);
+            }
+
+            // Configure merged cells in the row
+            foreach (var cellsToMerge in row.MergedCellsList)
+            {
+                // CellsToMerge example is "B2:D2"
+                xlSheet.Range(cellsToMerge).Row(1).Merge();
+            }
+
+            if (row.Cells.Count != 0)
+            {
+                if (row.StartLocation is not null && row.EndLocation is not null)
+                {
+                    var xlRow = xlSheet.Row(row.Cells.First().Location.Y);
+                    if (row.Height is not null)
+                        xlRow.Height = (double)row.Height;
+
+                    var xlRowRange = xlSheet.Range(row.StartLocation.Y, row.StartLocation.X, row.EndLocation.Y,
+                        row.EndLocation.X);
+                    xlRowRange.Style.Font.SetFontColor(XLColor.FromColor(row.ForeColor));
+                    xlRowRange.Style.Fill.SetBackgroundColor(XLColor.FromColor(row.BackColor));
+
+                    XLBorderStyleValues? outsideBorder = GetXlBorderLineStyle(row.OutsideBorder.LineStyle);
+
+                    if (outsideBorder is not null)
+                    {
+                        xlRowRange.Style.Border.SetOutsideBorder((XLBorderStyleValues)outsideBorder);
+                        xlRowRange.Style.Border.SetOutsideBorderColor(
+                            XLColor.FromColor(row.OutsideBorder.Color));
+                    }
+                    //xlRowRange.Style.Border.SetInsideBorder(XLBorderStyleValues.Thick);
+                    //xlRowRange.Style.Border.SetTopBorder(XLBorderStyleValues.Thick);
+                    //xlRowRange.Style.Border.SetRightBorder(XLBorderStyleValues.DashDotDot);
+                }
+                else
+                {
+                    var xlRow = xlSheet.Row(row.Cells.First().Location.Y);
+                    if (row.Height is not null)
+                        xlRow.Height = (double)row.Height;
+                    xlRow.Style.Font.SetFontColor(XLColor.FromColor(row.ForeColor));
+                    xlRow.Style.Fill.SetBackgroundColor(XLColor.FromColor(row.BackColor));
+                    xlRow.Style.Border.SetOutsideBorder(XLBorderStyleValues.Dotted);
+                    xlRow.Style.Border.SetInsideBorder(XLBorderStyleValues.Thick);
+                    xlRow.Style.Border.SetTopBorder(XLBorderStyleValues.Thick);
+                    xlRow.Style.Border.SetRightBorder(XLBorderStyleValues.DashDotDot);
+                }
+            }
+        }
+
+        private static XLBorderStyleValues? GetXlBorderLineStyle(LineStyle borderLineStyle)
+        {
+            return borderLineStyle switch
+            {
+                LineStyle.DashDotDot => XLBorderStyleValues.DashDotDot,
+                LineStyle.Thick => XLBorderStyleValues.Thick,
+                LineStyle.Thin => XLBorderStyleValues.Thin,
+                LineStyle.Dotted => XLBorderStyleValues.Dotted,
+                LineStyle.Double => XLBorderStyleValues.Double,
+                LineStyle.DashDot => XLBorderStyleValues.DashDot,
+                LineStyle.Dashed => XLBorderStyleValues.Dashed,
+                LineStyle.SlantDashDot => XLBorderStyleValues.SlantDashDot,
+                _ => null
+            };
         }
     }
 }

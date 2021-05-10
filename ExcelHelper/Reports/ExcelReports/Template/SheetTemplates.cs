@@ -30,9 +30,9 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             row.BackColor = Color.Gray;
             row2.BackColor = Color.Gray;
             table.InLineBorder = border;
-            table.OutLineBorder = border;
+            table.OutsideBorder = border;
             table2.InLineBorder = border;
-            table2.OutLineBorder = border;
+            table2.OutsideBorder = border;
             sheet.Tables.Add(table);
             sheet.Tables.Add(table2);
             sheet.Tables.Add(accountheader);
