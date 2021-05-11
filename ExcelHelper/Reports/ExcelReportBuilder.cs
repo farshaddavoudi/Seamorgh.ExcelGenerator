@@ -176,12 +176,10 @@ namespace ExcelHelper.Reports
             {
                 case "Debit":
                     cell.TextAlign = TextAlign.Right;
-                    cell.AutoFill = true; //TODO: Discussion with Shahab to remove it
                     cell.Category = Category.Currency;
                     break;
                 case "Credit":
                     cell.TextAlign = TextAlign.Right;
-                    cell.AutoFill = false; //TODO: Discussion with Shahab to remove it
                     cell.Category = Category.Currency;
                     break;
 

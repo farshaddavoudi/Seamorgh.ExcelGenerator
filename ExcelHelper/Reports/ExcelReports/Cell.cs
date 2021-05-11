@@ -17,6 +17,7 @@ namespace ExcelHelper.Reports.ExcelReports
         public Category Category { get; set; } = Category.General;
         public bool Visible { get; set; } = true;
         // TODO: Add Comments to cells
+        public bool IsLock { get; set; } = false;
     }
 
     public enum Category
