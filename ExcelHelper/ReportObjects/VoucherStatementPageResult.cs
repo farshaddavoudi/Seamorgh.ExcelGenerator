@@ -20,6 +20,5 @@ namespace ExcelHelper.VoucherStatementReport
 
         [ExcelReport(UseInFormulas = false , Visible = false)]
         public List<SummaryAccount> SummaryAccounts { get; set; }
-
     }
 }

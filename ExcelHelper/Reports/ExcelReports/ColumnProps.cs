@@ -11,6 +11,8 @@ namespace ExcelHelper.Reports.ExcelReports
         public TextAlign TextAlign { get; set; } = TextAlign.Right; //Default RTL direction
         public bool IsHidden { get; set; } = false;
         // TODO: Add MergedCells for Columns property
+        public bool AutoFite { get; set; } 
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ColumnNo == default)

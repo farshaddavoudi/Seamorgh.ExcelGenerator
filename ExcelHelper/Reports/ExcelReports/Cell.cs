@@ -16,7 +16,6 @@ namespace ExcelHelper.Reports.ExcelReports
         public TextAlign? TextAlign { get; set; }
         public Category Category { get; set; } = Category.General;
         public bool Visible { get; set; } = true;
-        public bool AutoFill { get; set; } //TODO: Discussion with Shahab to remove it. Has no effect on code
         // TODO: Add Comments to cells
     }
 
