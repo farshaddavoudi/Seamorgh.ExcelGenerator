@@ -4,8 +4,7 @@ namespace ExcelHelper.Reports.ExcelReports.PropertyOptions
 {
     public class CellsPropertyOptions : PropertyOption
     {
-        public CellsPropertyOptions(Location startLocation) : base(startLocation) { }
-        public string EndLocation { get; set; }
+        public CellsPropertyOptions(Location location) : base(location) { }
         public Size Size { get; set; }
     }
 }

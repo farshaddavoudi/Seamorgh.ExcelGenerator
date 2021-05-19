@@ -44,14 +44,12 @@ namespace ExcelHelper.Reports
             {
 
                 Row row = new();
-                row.StartLocation = new Location(options.StartLocation.X, options.StartLocation.Y);
-                row.EndLocation = new Location(options.StartLocation.X, options.StartLocation.Y);
                 var location = new Location(options.StartLocation.X, options.StartLocation.Y);
                 foreach (var cell in cells)
                 {
                     if (cell is string)
                     {
-                        row.Cells.Add(AddCell(cell, "", new CellsPropertyOptions(location)));
+                        row.Cells.Add(AddCell(cell, "", new CellsPropertyOptions(new Location(location.X,location.Y))));
                         location.X++;
                     }
                     else
@@ -67,7 +65,6 @@ namespace ExcelHelper.Reports
                         }
                     }
                 }
-                row.EndLocation = new Location(location.X - 1, location.Y);
                 return row;
             }
             return null;
@@ -77,14 +74,13 @@ namespace ExcelHelper.Reports
         {
             if (list is IEnumerable cells)
             {
-                var location = options.StartLocation;
+                var location = new Location(options.StartLocation.X, options.StartLocation.Y);
                 Row row = new();
                 foreach (var cell in cells)
                 {
-                    row.Cells.Add(AddCell(string.Empty, string.Empty, new CellsPropertyOptions(location)));
+                    row.Cells.Add(AddCell(string.Empty, string.Empty, new CellsPropertyOptions(new Location(location.X, location.Y))));
                     location.X++;
                 }
-                row.EndLocation = location;
                 return row;
             }
             return null;
@@ -105,14 +101,14 @@ namespace ExcelHelper.Reports
             {
                 Table table = new();
                 var location = options.StartLocation;
-                table.StartLocation = new Location(location.X, location.Y);
-                table.EndLocation = new Location(location.X, location.Y);
+                //table.StartLocation = new Location(location.X, location.Y);
+                //table.EndLocation = new Location(location.X, location.Y);
                 foreach (var item in rows)
                 {
                     table.Rows.Add(AddRow(new List<object> { item }, new RowPropertyOptions(location)));
                     location.Y++;
                 }
-                table.EndLocation = location;
+                //table.EndLocation = location;
                 return table;
             }
             return null;

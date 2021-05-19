@@ -9,8 +9,20 @@ namespace ExcelHelper.Reports.ExcelReports
 {
     public class Row : IValidatableObject
     {
-        public Location StartLocation { get; set; }
-        public Location EndLocation { get; set; }
+        public Location StartLocation 
+        {
+            get
+            {
+                return Cells.FirstOrDefault().Location ;
+            }
+        }
+        public Location EndLocation 
+        {
+            get
+            {
+                return Cells.LastOrDefault().Location;
+            }
+        }
         public Color BackColor { get; set; } = Color.White;
         public Color ForeColor { get; set; } = Color.Black;
         // TODO: Add below props
@@ -18,8 +30,8 @@ namespace ExcelHelper.Reports.ExcelReports
         public List<Cell> Cells { get; set; } = new(); //TODO: Discuss with Shahab, can Cells.Count == 0 for a row? If not, add validation
         public double? Height { get; set; }
         public List<string> MergedCellsList { get; set; } = new();
-        public Border AllBorder { get; set; } //TODO: Discuss with Shahab: Change to Top/Right/Left/Bottom/Inside borders? Not implemented yet.
-        public Border OutsideBorder { get; set; }
+        public Border AllBorder { get; set; } = new(LineStyle.Thick, Color.Black);//TODO: Discuss with Shahab: Change to Top/Right/Left/Bottom/Inside borders? Not implemented yet.
+        public Border OutsideBorder { get; set; } = new(LineStyle.Thick,Color.Black);
         public string Formulas { get; set; }
         public int CellsCount => Cells.Count;
 

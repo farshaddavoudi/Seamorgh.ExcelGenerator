@@ -41,8 +41,8 @@ namespace MyApp
                                             new(new Location(3,5)){Value = "احمد", Category =Category.Text, TextAlign = TextAlign.Center}
                                         },
                                         MergedCellsList = new(){"C5:D5"},
-                                        StartLocation = new Location(3,5),
-                                        EndLocation = new Location(4,5),
+                                        //StartLocation = new Location(3,5),
+                                        //EndLocation = new Location(4,5),
                                         ForeColor = Color.DarkGreen,
                                         BackColor = Color.Aqua,
                                         OutsideBorder = new Border(LineStyle.DashDotDot, Color.Brown)
@@ -54,8 +54,8 @@ namespace MyApp
                                             new(new Location(3,6)){Value = "کامبیز دیرباز", Category =Category.Text, TextAlign = TextAlign.Center}
                                         },
                                         MergedCellsList = new(){"C6:D6"},
-                                        StartLocation = new Location(3,6),
-                                        EndLocation = new Location(4,6),
+                                        //StartLocation = new Location(3,6),
+                                        //EndLocation = new Location(4,6),
                                         ForeColor = Color.DarkGreen,
                                         BackColor = Color.Aqua,
                                         OutsideBorder = new Border(LineStyle.DashDotDot, Color.Brown)
@@ -67,15 +67,15 @@ namespace MyApp
                                             new(new Location(3,7)){Value = "اصغر فرهادی", Category =Category.Text, TextAlign = TextAlign.Center}
                                         },
                                         MergedCellsList = new(){"C7:D7"},
-                                        StartLocation = new Location(3,7),
-                                        EndLocation = new Location(4,7),
+                                        //StartLocation = new Location(3,7),
+                                        //EndLocation = new Location(4,7),
                                         ForeColor = Color.DarkGreen,
                                         BackColor = Color.Aqua,
                                         OutsideBorder = new Border(LineStyle.DashDotDot, Color.Brown)
                                     }
                                 },
-                                StartLocation = new Location(3,5), //TODO: Can't be inferred from First Row StartLocation???
-                                EndLocation = new Location(4,7), //TODO: Can't be inferred from EndLocation of last Row???
+                                //StartLocation = new Location(3,5), //TODO: Can't be inferred from First Row StartLocation???
+                                //EndLocation = new Location(4,7), //TODO: Can't be inferred from EndLocation of last Row???
                                 OutsideBorder = new Border(LineStyle.Thick, Color.GreenYellow),
                                 MergedCells = new List<string>{ "C5:D6" }
                             },
@@ -95,8 +95,8 @@ namespace MyApp
                                     new(new Location(3,2)){Value = "فرشاد", Category =Category.Text, TextAlign = TextAlign.Right}
                                 },
                                 MergedCellsList = new(){"C2:D2"},
-                                StartLocation = new Location(2,2),
-                                EndLocation = new Location(4,2),
+                                //StartLocation = new Location(2,2),
+                                //EndLocation = new Location(4,2),
                                 ForeColor = Color.BlueViolet,
                                 BackColor = Color.AliceBlue,
                                 OutsideBorder = new Border(LineStyle.DashDotDot, Color.Red)

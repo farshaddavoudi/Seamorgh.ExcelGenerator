@@ -16,9 +16,9 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             var table = builder.AddTable(result.RowResult, new TablePropertyOptions(new Location("A", 4)));
             var currentLocation = table.NextVerticalLocation;
             var row2 = builder.AddRow(new List<string> { "کد حساب", "بدهکار", "بستانکار" }, new RowPropertyOptions(currentLocation));
-            currentLocation = new Location(currentLocation.X, currentLocation.Y + 1);
+            currentLocation = row2.NextVerticalLocation;
             var table2 = builder.AddTable(result.RowResult, new TablePropertyOptions(currentLocation));
-            currentLocation = table2.NextHorizontalLocation;
+            currentLocation = table2.NextVerticalLocation;
             var accountheader = TableTemplates.AccountHeader(currentLocation);
             currentLocation = accountheader.NextVerticalLocation;
             var multiplexHeader = TableTemplates.Multiplex(result.SummaryAccounts, currentLocation);

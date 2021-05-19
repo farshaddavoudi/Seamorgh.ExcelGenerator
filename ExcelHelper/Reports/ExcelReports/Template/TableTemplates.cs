@@ -55,7 +55,7 @@ namespace ExcelHelper.Reports.ExcelReports.Template
                     ///
                     ///Adding Cell For Formulas
                     ///
-                    childrow.Formulas = $"{childrow.GetCell(childrow.StartLocation.X).Location.GetName()}:{childrow.GetCell(childrow.EndLocation.X).Location.GetName()}";
+                    childrow.Formulas = $"=sum({childrow.GetCell(childrow.StartLocation.X).Location.GetName()}:{childrow.GetCell(childrow.EndLocation.X).Location.GetName()})";
                     var sumcolum = childrow.AddCell();
                     sumcolum.Value = childrow.Formulas;
                     ////////
