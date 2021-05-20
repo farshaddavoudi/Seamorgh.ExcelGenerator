@@ -13,6 +13,7 @@ namespace ExcelHelper.Reports.ExcelReports
         {
             AllBorder = new Border(LineStyle.Non, Color.Black);
             OutsideBorder = new Border(LineStyle.Non, Color.Black);
+            MergedCellsList = new();
         }
         public Location StartLocation 
         {
@@ -34,7 +35,7 @@ namespace ExcelHelper.Reports.ExcelReports
         // Bold, FontName, FontSize, Italic, Shadow, StrikeThrough
         public List<Cell> Cells { get; set; } = new(); //TODO: Discuss with Shahab, can Cells.Count == 0 for a row? If not, add validation
         public double? Height { get; set; }
-        public List<string> MergedCellsList { get; set; } = new();
+        public List<string> MergedCellsList { get; set; } 
         public Border AllBorder { get; set; } 
         public Border OutsideBorder { get; set; }
         public string Formulas { get; set; }

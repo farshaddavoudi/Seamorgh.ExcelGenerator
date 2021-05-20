@@ -53,6 +53,9 @@ namespace ExcelHelper.Reports.ExcelReports.Template
                     var childrow = builder.AddRow(item.Multiplex, new RowPropertyOptions(currentLocation));
                     row.BackColor = Color.DarkBlue;
                     row.ForeColor = Color.White;
+                    header.BackColor = Color.DarkBlue;
+                    header.ForeColor = Color.White;
+
                     ///
                     ///Adding Cell For Formulas
                     ///
