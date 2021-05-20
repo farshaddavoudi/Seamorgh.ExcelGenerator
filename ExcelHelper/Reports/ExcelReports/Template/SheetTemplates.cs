@@ -21,10 +21,12 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             currentLocation = table2.NextVerticalLocation;
             var accountheader = TableTemplates.AccountHeader(currentLocation);
             currentLocation = accountheader.NextVerticalLocation;
+            var accounts = TableTemplates.Accounts(result.Accounts, currentLocation);
+            currentLocation = accounts.NextHorizontalLocation;
+            currentLocation = new Location(currentLocation.X, currentLocation.Y - 3);
+
             var multiplexHeader = TableTemplates.Multiplex(result.SummaryAccounts, currentLocation);
 
-
-            //var accounts=TableTemplates.Accounts(result.Accounts);
 
             Border border = new(LineStyle.Thick, Color.Black);
             row.BackColor = Color.Gray;
@@ -36,6 +38,7 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             sheet.Tables.Add(table);
             sheet.Tables.Add(table2);
             sheet.Tables.Add(accountheader);
+            sheet.Tables.Add(accounts);
             sheet.Tables.Add(multiplexHeader);
             sheet.Rows.Add(row);
             sheet.Rows.Add(row2);

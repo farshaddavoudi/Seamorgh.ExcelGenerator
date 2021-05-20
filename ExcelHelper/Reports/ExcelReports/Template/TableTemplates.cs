@@ -35,18 +35,19 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             Table table = new();
             ExcelReportBuilder builder = new();
             Border border = new(LineStyle.Thick, Color.Black);
+            var row = builder.AddRow(summary, new RowPropertyOptions(currentLocation), 2);
+            currentLocation = row.NextVerticalLocation;
+            row.BackColor = Color.DarkBlue;
+            row.ForeColor = Color.White;
+            row.AllBorder = border;
+            row.OutsideBorder = border;
+            table.Rows.Add(row);
             foreach (var item in summary)
             {
-                var row=builder.AddRow(summary, new RowPropertyOptions(currentLocation));
-                currentLocation = row.NextHorizontalLocation;
-                row.BackColor = Color.DarkBlue;
-                row.ForeColor = Color.White;
-                row.AllBorder = border;
-                row.OutsideBorder = border;
-                table.Rows.Add(row);
+
                 foreach (var result in item.Multiplex)
                 {
-                    var header = builder.AddRow(new List<string> { "قبل از تسهیم", "بعد از تسهیم", }, new RowPropertyOptions(currentLocation));
+                    var header = builder.AddRow(new List<string> { "قبل از تسهیم", "بعد از تسهیم","جمع" }, new RowPropertyOptions(currentLocation));
                     table.Rows.Add(header);
                     currentLocation = header.NextVerticalLocation;
                     var childrow = builder.AddRow(item.Multiplex, new RowPropertyOptions(currentLocation));
@@ -62,16 +63,24 @@ namespace ExcelHelper.Reports.ExcelReports.Template
                     ///
 
                     table.Rows.Add(childrow);
+                    currentLocation = new Location(childrow.NextHorizontalLocation.X,header.EndLocation.Y) ;
                 }
-                currentLocation = row.NextHorizontalLocation;
             }
 
             return table;
         }
 
-        public static Table Accounts(List<AccountDto> accounts)
+        public static Table Accounts(List<AccountDto> accounts, Location currentLocation)
         {
-            throw new NotImplementedException();
+            Table table = new();
+            ExcelReportBuilder builder = new();
+            Border border = new(LineStyle.Thick, Color.Black);
+
+                var childrow = builder.AddTable(accounts, new TablePropertyOptions(currentLocation));
+            table = childrow;
+            table.InLineBorder = border;
+            table.OutsideBorder = border;
+            return table;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Linq;
@@ -7,6 +8,11 @@ namespace ExcelHelper.Reports.ExcelReports
 {
     public class Table : IValidatableObject
     {
+        public Table()
+        {
+            InLineBorder = new Border(LineStyle.Non, Color.Black);
+            OutsideBorder = new Border(LineStyle.Non, Color.Black);
+        }
         public List<Row> Rows { get; set; } = new();
         public Location StartLocation 
         {
@@ -24,8 +30,8 @@ namespace ExcelHelper.Reports.ExcelReports
             }
 
         } //TODO: above question
-        public Border InLineBorder { get; set; } =new (LineStyle.Thick, Color.Black);//TODO: What it is? Inside border can be set on cells or columns or rows
-        public Border OutsideBorder { get; set; } = new Border(LineStyle.Thick, Color.Black);
+        public Border InLineBorder { get; set; } =new (LineStyle.Non, Color.Black);//TODO: What it is? Inside border can be set on cells or columns or rows
+        public Border OutsideBorder { get; set; } = new Border(LineStyle.Non, Color.Black);
         public bool IsBordered { get; set; } //TODO? What is this? isn't it the default one?
         public List<string> MergedCells { get; set; } = new();
         public int RowsCount => Rows.Count;

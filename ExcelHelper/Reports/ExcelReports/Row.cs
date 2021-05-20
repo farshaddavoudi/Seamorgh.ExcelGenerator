@@ -9,6 +9,11 @@ namespace ExcelHelper.Reports.ExcelReports
 {
     public class Row : IValidatableObject
     {
+        public Row()
+        {
+            AllBorder = new Border(LineStyle.Non, Color.Black);
+            OutsideBorder = new Border(LineStyle.Non, Color.Black);
+        }
         public Location StartLocation 
         {
             get
@@ -30,8 +35,8 @@ namespace ExcelHelper.Reports.ExcelReports
         public List<Cell> Cells { get; set; } = new(); //TODO: Discuss with Shahab, can Cells.Count == 0 for a row? If not, add validation
         public double? Height { get; set; }
         public List<string> MergedCellsList { get; set; } = new();
-        public Border AllBorder { get; set; } = new(LineStyle.Thick, Color.Black);//TODO: Discuss with Shahab: Change to Top/Right/Left/Bottom/Inside borders? Not implemented yet.
-        public Border OutsideBorder { get; set; } = new(LineStyle.Thick,Color.Black);
+        public Border AllBorder { get; set; } 
+        public Border OutsideBorder { get; set; }
         public string Formulas { get; set; }
         public int CellsCount => Cells.Count;
 
@@ -47,7 +52,7 @@ namespace ExcelHelper.Reports.ExcelReports
 
         public Cell AddCell()
         {
-            Cell cell = new(NextVerticalLocation);
+            Cell cell = new(NextHorizontalLocation);
             Cells.Add(cell);
             return cell;
         }

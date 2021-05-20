@@ -4,6 +4,7 @@ using ExcelHelper.Reports.ExcelReports.PropertyOptions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace ExcelHelper.Reports
@@ -12,7 +13,7 @@ namespace ExcelHelper.Reports
     {
         WorkBook AddFile(string path, string filename);
         Sheet AddSheet(string title);
-        Row AddRow(object list, RowPropertyOptions options);
+        Row AddRow(object list, RowPropertyOptions options, int emptyCells = 0);
         List<Row> EmptyRows(object list, RowPropertyOptions options, int count = 1);
         Table AddTable(object rows, TablePropertyOptions options);
         Cell AddCell(object cell, string cellName, CellsPropertyOptions options);
@@ -38,7 +39,7 @@ namespace ExcelHelper.Reports
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
-        public Row AddRow(object list, RowPropertyOptions options)
+        public Row AddRow(object list, RowPropertyOptions options, int emptyCells = 0)
         {
             if (list is IEnumerable cells)
             {
@@ -49,7 +50,7 @@ namespace ExcelHelper.Reports
                 {
                     if (cell is string)
                     {
-                        row.Cells.Add(AddCell(cell, "", new CellsPropertyOptions(new Location(location.X,location.Y))));
+                        row.Cells.Add(AddCell(cell, "", new CellsPropertyOptions(new Location(location.X, location.Y))));
                         location.X++;
                     }
                     else
@@ -59,10 +60,28 @@ namespace ExcelHelper.Reports
                         {
                             if (cell != null)
                             {
-                                row.Cells.Add(AddCell(cell, prop.Name, new CellsPropertyOptions(new Location(location.X, location.Y))));
-                                location.X++;
+                                var att = prop.GetCustomAttributes(true).Where(x => x is ExcelReportAttribute).FirstOrDefault();
+                                if (att is ExcelReportAttribute attr)
+                                {
+                                    if (attr.Visible != false)
+                                    {
+                                        row.Cells.Add(AddCell(cell, prop.Name, new CellsPropertyOptions(new Location(location.X, location.Y))));
+                                        location.X++;
+                                    }
+                                }
+                                else
+                                {
+                                    row.Cells.Add(AddCell(cell, prop.Name, new CellsPropertyOptions(new Location(location.X, location.Y))));
+                                    location.X++;
+                                }
                             }
                         }
+                    }
+                    for (int i = 0; i < emptyCells; i++)
+                    {
+                        row.Cells.Add(AddCell("", "", new CellsPropertyOptions(new Location(location.X, location.Y))));
+                        location.X++;
+
                     }
                 }
                 return row;
@@ -90,7 +109,7 @@ namespace ExcelHelper.Reports
         {
             List<Row> rows = new();
             for (int i = 0; i < count; i++)
-                EmptyRow(list, options);
+                rows.Add(EmptyRow(list, options));
 
             return rows;
         }

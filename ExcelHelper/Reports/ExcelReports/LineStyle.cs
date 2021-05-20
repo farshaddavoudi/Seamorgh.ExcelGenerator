@@ -9,6 +9,7 @@
         DashDot,
         DashDotDot,
         SlantDashDot,
-        Double
+        Double,
+        Non
     }
 }

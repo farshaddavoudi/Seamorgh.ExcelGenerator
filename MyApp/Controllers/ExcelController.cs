@@ -18,37 +18,92 @@ namespace MyApp.Controllers
                 ReportName = "TestReport",
                 SummaryAccounts = new List<SummaryAccount>
                 {
-                    new SummaryAccount {AccountName = "MyAccount"},
-                    new SummaryAccount {AccountName = "MyAccount2"}
+                    new SummaryAccount
+                    {
+                        AccountName = "کارخانه دان-51011" ,
+                        Multiplex =new List<Multiplex>
+                        { 
+                            new Multiplex{After = 5000000,Befor = 4000 },
+                        },
+
+                    },
+                    new SummaryAccount 
+                    {
+                        AccountName = "پرورش پولت-51018" ,
+                        Multiplex =new List<Multiplex>
+                        {
+                            new Multiplex{After = 5000000,Befor = 4000 },
+                        },
+
+                    },
+                    new SummaryAccount 
+                    {
+                        AccountName = "تخم گزار تجاری-51035" ,
+                        Multiplex =new List<Multiplex>
+                        {
+                            new Multiplex{After = 5000000,Befor = 4000 },
+                        },
+                    }
 
                 },
 
+                Accounts = new List<AccountDto>
+                {
+                   new AccountDto
+                   {
+                        Name="حقوق پایه",
+                        Code="81010"
+                   },
+                   new AccountDto
+                   {
+                        Name="اضافه کار",
+                        Code="81011"
+                   },
+
+                },
                 RowResult = new List<VoucherStatementRowResult>
                 {
                     new VoucherStatementRowResult
                     {
-                        AccountCode = "Code1",
-                        Credit = 2342,
-                        Debit = 232
+                        AccountCode = "13351",
+                        Credit = 50000,
+                        Debit = 0
                     },
                     new VoucherStatementRowResult
                     {
-                        AccountCode = "Code2",
-                        Credit = 222,
-                        Debit = 23333
+                        AccountCode = "21253",
+                        Credit = 0,
+                        Debit = 50000
+                    },
+                    new VoucherStatementRowResult
+                    {
+                        AccountCode = "13556",
+                        Credit = 1000000,
+                        Debit = 0
+                    },
+                    new VoucherStatementRowResult
+                    {
+                        AccountCode = "13500",
+                        Credit = 1000000,
+                        Debit = 0
+                    },
+                    new VoucherStatementRowResult
+                    {
+                        AccountCode = "13499",
+                        Credit = 2000000,
+                        Debit = 0
+                    },
+                    new VoucherStatementRowResult
+                    {
+                        AccountCode = "22500",
+                        Credit = 0,
+                        Debit = 4000000
                     }
+
                 }
             };
 
-            Multiplex multiplex = new Multiplex
-            {
-                After = 100000,
-                Befor = 50000
-            };
 
-            arg.SummaryAccounts.FirstOrDefault(x => x.AccountName == "MyAccount")?.Multiplex.Add(multiplex);
-
-            arg.SummaryAccounts.FirstOrDefault(x => x.AccountName == "MyAccount2")?.Multiplex.Add(multiplex);
 
             var result2 = ExcelReportGenerator.VoucherStatementExcelReport(arg);
 
