@@ -1,9 +1,7 @@
 ﻿using ExcelHelper.ReportObjects;
 using ExcelHelper.Reports.ExcelReports.PropertyOptions;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 
 namespace ExcelHelper.Reports.ExcelReports.Template
 {
@@ -17,12 +15,14 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             var row = builder.AddRow(new List<string> { "نام حساب", "کد حساب" }, new RowPropertyOptions(startLocation));
             var location = row.NextVerticalLocation;
             var emtyrow = builder.EmptyRows(new List<string> { "", "" }, new RowPropertyOptions(location));
-           // location = emtyrow.LastOrDefault().NextHorizontalLocation;
+            // location = emtyrow.LastOrDefault().NextHorizontalLocation;
 
             row.BackColor = Color.DarkBlue;
             row.ForeColor = Color.White;
-            row.MergedCellsList.Add("A17:A18");
-            row.MergedCellsList.Add("B17:B18");
+            //row.MergedCellsList.Add("A17:A18");
+            //row.MergedCellsList.Add("B17:B18");
+            table.MergedCells.Add("A17:A18");
+            table.MergedCells.Add("B17:B18");
             row.AllBorder = border;
             row.OutsideBorder = border;
             table.Rows.Add(row);
@@ -30,7 +30,7 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             return table;
         }
 
-        public static Table Multiplex(List<SummaryAccount> summary,Location currentLocation)
+        public static Table Multiplex(List<SummaryAccount> summary, Location currentLocation)
         {
             Table table = new();
             ExcelReportBuilder builder = new();
@@ -47,7 +47,7 @@ namespace ExcelHelper.Reports.ExcelReports.Template
 
                 foreach (var result in item.Multiplex)
                 {
-                    var header = builder.AddRow(new List<string> { "قبل از تسهیم", "بعد از تسهیم","جمع" }, new RowPropertyOptions(currentLocation));
+                    var header = builder.AddRow(new List<string> { "قبل از تسهیم", "بعد از تسهیم", "جمع" }, new RowPropertyOptions(currentLocation));
                     table.Rows.Add(header);
                     currentLocation = header.NextVerticalLocation;
                     var childrow = builder.AddRow(item.Multiplex, new RowPropertyOptions(currentLocation));
@@ -66,7 +66,7 @@ namespace ExcelHelper.Reports.ExcelReports.Template
                     ///
 
                     table.Rows.Add(childrow);
-                    currentLocation = new Location(childrow.NextHorizontalLocation.X,header.EndLocation.Y) ;
+                    currentLocation = new Location(childrow.NextHorizontalLocation.X, header.EndLocation.Y);
                 }
             }
 
@@ -79,7 +79,7 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             ExcelReportBuilder builder = new();
             Border border = new(LineStyle.Thick, Color.Black);
 
-                var childrow = builder.AddTable(accounts, new TablePropertyOptions(currentLocation));
+            var childrow = builder.AddTable(accounts, new TablePropertyOptions(currentLocation));
             table = childrow;
             table.InLineBorder = border;
             table.OutsideBorder = border;

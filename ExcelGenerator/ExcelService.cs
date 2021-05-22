@@ -72,6 +72,12 @@ namespace ExcelGenerator
                         _ => throw new ArgumentOutOfRangeException()
                     };
 
+                    // Apply sheet merges here
+                    foreach (var mergedCells in sheet.MergedCells)
+                    {
+                        xlSheet.Range(mergedCells).Merge();
+                    }
+
                     //-------------------------------------------
                     //  Columns properties
                     //-------------------------------------------
@@ -124,7 +130,7 @@ namespace ExcelGenerator
                             tableRange.Style.Border.SetOutsideBorderColor(XLColor.FromColor(table.OutsideBorder.Color));
                         }
 
-                        // Apply merges here
+                        // Apply table merges here
                         foreach (var mergedCells in table.MergedCells)
                         {
                             xlSheet.Range(mergedCells).Merge();
