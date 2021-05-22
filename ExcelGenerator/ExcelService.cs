@@ -324,6 +324,7 @@ namespace ExcelGenerator
                 LineStyle.DashDot => XLBorderStyleValues.DashDot,
                 LineStyle.Dashed => XLBorderStyleValues.Dashed,
                 LineStyle.SlantDashDot => XLBorderStyleValues.SlantDashDot,
+                LineStyle.None => XLBorderStyleValues.None,
                 _ => null
             };
         }

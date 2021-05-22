@@ -11,8 +11,8 @@ namespace ExcelHelper.Reports.ExcelReports
     {
         public Row()
         {
-            AllBorder = new Border(LineStyle.Non, Color.Black);
-            OutsideBorder = new Border(LineStyle.Non, Color.Black);
+            AllBorder = new Border(LineStyle.None, Color.Black);
+            OutsideBorder = new Border(LineStyle.None, Color.Black);
             MergedCellsList = new();
         }
         public Location StartLocation 
