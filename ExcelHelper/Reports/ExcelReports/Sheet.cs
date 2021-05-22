@@ -24,7 +24,7 @@ namespace ExcelHelper.Reports.ExcelReports
         public List<string> MergedCells { get; set; } = new();
         // TODO: New Property
         public WSProps WSProps { get; set; } = new();
-        public bool IsLock { get; set; } = false;
+        public bool IsLocked { get; set; } = false;
 
     }
 }

@@ -17,7 +17,7 @@ namespace ExcelHelper.Reports.ExcelReports
         public Category Category { get; set; } = Category.General;
         public bool Visible { get; set; } = true;
         // TODO: Add Comments to cells
-        public bool IsLock { get; set; } = false;
+        public bool? IsLocked { get; set; } = null; //Default is null, and it gets Sheet "IsLocked" property value in this case, but if specified, it will override it
     }
 
     public enum Category
@@ -29,6 +29,7 @@ namespace ExcelHelper.Reports.ExcelReports
         // TODO: Discussion with Shahab about removing it because it should be set in business, not in nuget
         SolarHijriDate, //Will convert Miladi date to Solar Hijri e.g. 1400/02/02 
         Text,
-        Percentage
+        Percentage,
+        Formula
     }
 }

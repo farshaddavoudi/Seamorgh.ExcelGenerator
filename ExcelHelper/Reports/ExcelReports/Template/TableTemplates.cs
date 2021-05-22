@@ -56,14 +56,12 @@ namespace ExcelHelper.Reports.ExcelReports.Template
                     header.BackColor = Color.DarkBlue;
                     header.ForeColor = Color.White;
 
-                    ///
-                    ///Adding Cell For Formulas
-                    ///
+                    // Add Cell For Formulas
                     childrow.Formulas = $"=sum({childrow.GetCell(childrow.StartLocation.X).Location.GetName()}:{childrow.GetCell(childrow.EndLocation.X).Location.GetName()})";
-                    var sumcolum = childrow.AddCell();
-                    sumcolum.Value = childrow.Formulas;
+                    var sumColumn = childrow.AddCell();
+                    sumColumn.Category = Category.Formula;
+                    sumColumn.Value = childrow.Formulas;
                     ////////
-                    ///
 
                     table.Rows.Add(childrow);
                     currentLocation = new Location(childrow.NextHorizontalLocation.X, header.EndLocation.Y);

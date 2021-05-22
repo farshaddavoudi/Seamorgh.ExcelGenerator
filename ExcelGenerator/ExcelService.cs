@@ -43,6 +43,9 @@ namespace ExcelGenerator
                     // Set name
                     var xlSheet = xlWorkbook.Worksheets.Add(sheet.Name);
 
+                    // Set protection level
+                    xlSheet.Protect().AllowedElements = XLSheetProtectionElements.SelectUnlockedCells;
+
                     // Set direction
                     if (sheet.WSProps.IsRightToLeft is not null)
                         xlSheet.RightToLeft = (bool)sheet.WSProps.IsRightToLeft;
@@ -116,7 +119,7 @@ namespace ExcelGenerator
                     {
                         foreach (var tableRow in table.Rows)
                         {
-                            xlSheet.ConfigureRow(tableRow);
+                            xlSheet.ConfigureRow(tableRow, sheet.IsLocked);
                         }
 
                         var tableRange = xlSheet.Range(table.StartLocation.Y, table.StartLocation.X,
@@ -143,7 +146,7 @@ namespace ExcelGenerator
                     //-------------------------------------------
                     foreach (var row in sheet.Rows)
                     {
-                        xlSheet.ConfigureRow(row);
+                        xlSheet.ConfigureRow(row, sheet.IsLocked);
                     }
 
                     //-------------------------------------------
@@ -154,7 +157,7 @@ namespace ExcelGenerator
                         if (cell.Visible is false)
                             continue;
 
-                        xlSheet.ConfigureCell(cell);
+                        xlSheet.ConfigureCell(cell, sheet.IsLocked);
                     }
                 }
 
@@ -171,7 +174,7 @@ namespace ExcelGenerator
             }
         }
 
-        private static void ConfigureCell(this IXLWorksheet xlSheet, Cell cell)
+        private static void ConfigureCell(this IXLWorksheet xlSheet, Cell cell, bool isSheetLocked)
         {
             // Infer XLDataType and value from "cell" category
             XLDataType? xlDataType;
@@ -209,6 +212,7 @@ namespace ExcelGenerator
                     break;
 
                 case Category.Text:
+                case Category.Formula:
                     xlDataType = XLDataType.Text;
                     break;
 
@@ -227,30 +231,38 @@ namespace ExcelGenerator
                 _ => null
             };
 
+            // Get IsLocked property based on Sheet and Cell "IsLocked" prop
+            bool isLocked = cell.IsLocked ?? isSheetLocked;
+
             //-------------------------------------------
             //  Map column per Cells loop cycle
             //-------------------------------------------
             var locationCell = xlSheet.Cell(cell.Location.Y, cell.Location.X);
 
-            locationCell.SetValue(cellValue)
-                .Style.Alignment.SetWrapText(cell.Wordwrap);
+            if (cell.Category == Category.Formula)
+                locationCell.SetFormulaA1(cellValue.ToString());
+            else
+                locationCell.SetValue(cellValue);
+
+            locationCell.Style
+                .Alignment.SetWrapText(cell.Wordwrap)
+                .Protection.SetLocked(isLocked);
 
             if (cellAlignmentHorizontalValue is not null)
                 locationCell.Style.Alignment.SetHorizontal((XLAlignmentHorizontalValues)cellAlignmentHorizontalValue!);
 
             if (xlDataType is not null)
                 locationCell.SetDataType((XLDataType)xlDataType);
-
         }
 
-        private static void ConfigureRow(this IXLWorksheet xlSheet, Row row)
+        private static void ConfigureRow(this IXLWorksheet xlSheet, Row row, bool isSheetLocked)
         {
             foreach (var rowCell in row.Cells)
             {
                 if (rowCell.Visible is false)
                     continue;
 
-                xlSheet.ConfigureCell(rowCell);
+                xlSheet.ConfigureCell(rowCell, isSheetLocked);
             }
 
             // Configure merged cells in the row
