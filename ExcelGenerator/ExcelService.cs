@@ -222,7 +222,7 @@ namespace ExcelGenerator
                     break;
 
                 case Category.Currency:
-                    xlDataType = XLDataType.Text;
+                    xlDataType = XLDataType.Number;
                     if (cellValue.IsNumber() is false)
                         throw new Exception("Cell with Currency category should be Number type");
                     cellValue = Convert.ToDecimal(cellValue).ToString("##,###");
@@ -269,6 +269,9 @@ namespace ExcelGenerator
             //-------------------------------------------
             var locationCell = xlSheet.Cell(cell.Location.Y, cell.Location.X);
 
+            if (xlDataType is not null)
+                locationCell.SetDataType((XLDataType)xlDataType);
+
             if (cell.Category == Category.Formula)
                 locationCell.SetFormulaA1(cellValue.ToString());
             else
@@ -280,9 +283,6 @@ namespace ExcelGenerator
 
             if (cellAlignmentHorizontalValue is not null)
                 locationCell.Style.Alignment.SetHorizontal((XLAlignmentHorizontalValues)cellAlignmentHorizontalValue!);
-
-            if (xlDataType is not null)
-                locationCell.SetDataType((XLDataType)xlDataType);
         }
 
         private static void ConfigureRow(this IXLWorksheet xlSheet, Row row, bool isSheetLocked)
