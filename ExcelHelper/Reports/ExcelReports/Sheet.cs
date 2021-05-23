@@ -1,18 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using ExcelHelper.Reports.ExcelReports.PropertyOptions;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ExcelHelper.Reports.ExcelReports
 {
     public class Sheet
     {
-        public Sheet()
-        {
-
-        }
-
-        public Sheet(string name)
+        public Sheet(string name, ProtectionOptions protectionOptions)
         {
             Name = name;
+            ProtectionOptions = protectionOptions;
         }
 
         [Required(ErrorMessage = "Sheet Name is required")]
@@ -25,6 +22,7 @@ namespace ExcelHelper.Reports.ExcelReports
         // TODO: New Property
         public WSProps WSProps { get; set; } = new();
         public bool IsLocked { get; set; } = false;
+        public ProtectionOptions ProtectionOptions { get; set; }
 
     }
 }

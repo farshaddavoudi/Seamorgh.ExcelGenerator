@@ -1,5 +1,6 @@
 ﻿using ExcelGenerator;
 using ExcelHelper.Reports.ExcelReports;
+using ExcelHelper.Reports.ExcelReports.PropertyOptions;
 using ExcelHelper.Reports.ExcelReports.Template;
 using ExcelHelper.VoucherStatementReport;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace MyApp
             {
                 FileName = "TestName",
                 WBProps = new WBProps { DefaultColumnWidth = 40 },
-                Sheets = new List<Sheet> { new()
+                Sheets = new List<Sheet> { new("",new ProtectionOptions())
                     {
                         Name = "MySheet",
                         Tables = new List<Table>

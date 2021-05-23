@@ -31,7 +31,7 @@ namespace ExcelHelper.Reports
 
         public Sheet AddSheet(string title)
         {
-            return new(title);
+            return new(title,new ProtectionOptions());
         }
 
         /// <summary>
