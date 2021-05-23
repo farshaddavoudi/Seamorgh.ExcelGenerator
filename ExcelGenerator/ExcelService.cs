@@ -135,6 +135,11 @@ namespace ExcelGenerator
                                 xlSheet.Column(colProps.ColumnNo).Width = (double)colProps.Width.Value!;
                         }
 
+                        if (colProps.AutoFit)
+                        {
+                            xlSheet.Column(colProps.ColumnNo).AdjustToContents();
+                        }
+
                         if (colProps.IsHidden)
                             xlSheet.Column(colProps.ColumnNo).Hide();
 
