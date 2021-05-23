@@ -96,7 +96,7 @@ namespace ExcelHelper.Reports.ExcelReports.Template
 
             var childrow = builder.AddTable(accounts, new TablePropertyOptions(currentLocation));
             table = childrow;
-            table.InLineBorder = border;
+            table.InlineBorder = border;
             table.OutsideBorder = border;
             return table;
         }

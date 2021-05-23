@@ -31,9 +31,9 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             Border border = new(LineStyle.Thick, Color.Black);
             row.BackColor = Color.Gray;
             row2.BackColor = Color.Gray;
-            table.InLineBorder = border;
+            table.InlineBorder = border;
             table.OutsideBorder = border;
-            table2.InLineBorder = border;
+            table2.InlineBorder = border;
             table2.OutsideBorder = border;
             sheet.Tables.Add(table);
             sheet.Tables.Add(table2);

@@ -155,12 +155,22 @@ namespace ExcelGenerator
                         var tableRange = xlSheet.Range(table.StartLocation.Y, table.StartLocation.X,
                             table.EndLocation.Y, table.EndLocation.X);
 
+                        // Config Outside-Border
                         XLBorderStyleValues? outsideBorder = GetXlBorderLineStyle(table.OutsideBorder.LineStyle);
 
                         if (outsideBorder is not null)
                         {
                             tableRange.Style.Border.SetOutsideBorder((XLBorderStyleValues)outsideBorder);
                             tableRange.Style.Border.SetOutsideBorderColor(XLColor.FromColor(table.OutsideBorder.Color));
+                        }
+
+                        // Config Inside-Border
+                        XLBorderStyleValues? insideBorder = GetXlBorderLineStyle(table.InlineBorder.LineStyle);
+
+                        if (insideBorder is not null)
+                        {
+                            tableRange.Style.Border.SetInsideBorder((XLBorderStyleValues)insideBorder);
+                            tableRange.Style.Border.SetInsideBorderColor(XLColor.FromColor(table.InlineBorder.Color));
                         }
 
                         // Apply table merges here
@@ -323,9 +333,8 @@ namespace ExcelGenerator
                         xlRowRange.Style.Border.SetOutsideBorderColor(
                             XLColor.FromColor(row.OutsideBorder.Color));
                     }
-                    //xlRowRange.Style.Border.SetInsideBorder(XLBorderStyleValues.Thick);
-                    //xlRowRange.Style.Border.SetTopBorder(XLBorderStyleValues.Thick);
-                    //xlRowRange.Style.Border.SetRightBorder(XLBorderStyleValues.DashDotDot);
+
+                    // TODO: For Inside border, the row should be considered as Ranged (like Table). I persume it is not important for this phase
                 }
                 else
                 {

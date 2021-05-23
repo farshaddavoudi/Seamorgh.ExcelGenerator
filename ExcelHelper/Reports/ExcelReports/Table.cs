@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Linq;
@@ -10,19 +9,19 @@ namespace ExcelHelper.Reports.ExcelReports
     {
         public Table()
         {
-            InLineBorder = new Border(LineStyle.None, Color.Black);
+            InlineBorder = new Border(LineStyle.None, Color.Black);
             OutsideBorder = new Border(LineStyle.None, Color.Black);
         }
         public List<Row> Rows { get; set; } = new();
-        public Location StartLocation 
+        public Location StartLocation
         {
-            get 
+            get
             {
                 return Rows.FirstOrDefault().StartLocation; ;
             }
         }  //TODO: Discuss with Shahab. The Rows has StartLocation itself, which one should be considered?
         //TODO: StartLocation and EndLocation for Table model are critical and should exist and be exact to create desired result
-        public Location EndLocation 
+        public Location EndLocation
         {
             get
             {
@@ -30,7 +29,7 @@ namespace ExcelHelper.Reports.ExcelReports
             }
 
         } //TODO: above question
-        public Border InLineBorder { get; set; } =new (LineStyle.None, Color.Black);//TODO: What it is? Inside border can be set on cells or columns or rows
+        public Border InlineBorder { get; set; } = new(LineStyle.None, Color.Black);//TODO: What it is? Inside border can be set on cells or columns or rows
         public Border OutsideBorder { get; set; } = new Border(LineStyle.None, Color.Black);
         public bool IsBordered { get; set; } //TODO? What is this? isn't it the default one?
         public List<string> MergedCells { get; set; } = new();
