@@ -10,9 +10,9 @@ namespace ExcelHelper.Reports.ExcelReports.Template
         public static Sheet VoucherStatementTemplate(VoucherStatementPageResult result)
         {
             ExcelReportBuilder builder = new();
-            Sheet sheet = new("RemainReport",new ProtectionOptions());
+            Sheet sheet = new("RemainReport", new ProtectionOptions());
             var row = builder.AddRow(new List<string> { "کد حساب", "بدهکار", "بستانکار" }, new RowPropertyOptions(new Location("A", 3)));
-            var cell = builder.AddCell(result.ReportName, "ReportName", new CellsPropertyOptions(new Location("H", 1)));
+            var cell = builder.AddCell(result.ReportName, "ReportName", new CellsPropertyOptions(new Location("A", 1)));
             var table = builder.AddTable(result.RowResult, new TablePropertyOptions(new Location("A", 4)));
             var currentLocation = table.NextVerticalLocation;
             var row2 = builder.AddRow(new List<string> { "کد حساب", "بدهکار", "بستانکار" }, new RowPropertyOptions(currentLocation));
