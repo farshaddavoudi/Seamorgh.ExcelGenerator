@@ -44,8 +44,8 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             sheet.Rows.Add(row2);
             sheet.Cells.Add(cell);
 
-            sheet.MergedCells.Add("A1:C2");
-
+            sheet.MergedCells.Add("A1:H2");
+            sheet.MergedCells.Add("L17:L18");
             return sheet;
         }
     }

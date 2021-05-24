@@ -85,6 +85,7 @@ namespace ExcelHelper.Reports.ExcelReports.Template
                 avg.Category = Category.Formula;
                 
             }
+            
             return table;
         }
 
