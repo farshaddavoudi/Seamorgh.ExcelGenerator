@@ -105,12 +105,6 @@ namespace ExcelGenerator
                         _ => throw new ArgumentOutOfRangeException()
                     };
 
-                    // Apply sheet merges here
-                    foreach (var mergedCells in sheet.MergedCells)
-                    {
-                        xlSheet.Range(mergedCells).Merge();
-                    }
-
                     //-------------------------------------------
                     //  Columns properties
                     //-------------------------------------------
@@ -203,6 +197,18 @@ namespace ExcelGenerator
                             continue;
 
                         xlSheet.ConfigureCell(cell, sheet.IsLocked);
+                    }
+
+                    // Apply sheet merges here
+                    foreach (var mergedCells in sheet.MergedCells)
+                    {
+                        var rangeToMerge = xlSheet.Range(mergedCells).Cells();
+
+                        var value = rangeToMerge.FirstOrDefault(r => r.IsEmpty() is false)?.Value;
+
+                        rangeToMerge.First().SetValue(value);
+
+                        xlSheet.Range(mergedCells).Merge();
                     }
                 }
 
