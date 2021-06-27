@@ -12,6 +12,7 @@ namespace ExcelHelper.Reports.ExcelReports
         public bool IsHidden { get; set; } = false;
         // TODO: Add MergedCells for Columns property
         public bool AutoFit { get; set; } = false; //TODO: has same concept with Width class (duplicate)
+        public bool? IsLocked { get; set; } = null; //Default is null, and it gets Sheet "IsLocked" property value in this case, but if specified, it will override it
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

@@ -44,7 +44,10 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             sheet.Rows.Add(row);
             sheet.Rows.Add(row2);
             sheet.Cells.Add(cell);
-
+            ColumnProps column = new ColumnProps();
+            column.IsHidden = true;
+            column.ColumnNo = 2;
+            sheet.Columns.Add(column);
             sheet.MergedCells.Add("A1:H2");
             sheet.MergedCells.Add("L17:L18");
             return sheet;
