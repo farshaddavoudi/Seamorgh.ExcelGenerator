@@ -20,7 +20,6 @@ namespace ExcelHelper.Reports
         List<Cell> EmptyCells(CellsPropertyOptions options, int count = 1);
     }
 
-
     public class ExcelReportBuilder : IExcelReportBuilder
     {
 
@@ -31,7 +30,7 @@ namespace ExcelHelper.Reports
 
         public Sheet AddSheet(string title)
         {
-            return new(title,new ProtectionOptions());
+            return new(title);
         }
 
         /// <summary>

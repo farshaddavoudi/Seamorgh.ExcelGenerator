@@ -1,11 +1,8 @@
-﻿using System.ComponentModel;
-
-namespace ExcelHelper.Reports.ExcelReports.PropertyOptions
+﻿namespace ExcelHelper.Reports.ExcelReports.PropertyOptions
 {
     public class ProtectionOptions
     {
         public string Password { get; set; }
-        [DefaultValue(true)]
         public bool Selectlockedcells { get; set; }
         public bool Selectunlockedcells { get; set; }
         public bool Formatcells { get; set; }

@@ -10,7 +10,8 @@ namespace ExcelHelper.Reports.ExcelReports.Template
         public static Sheet VoucherStatementTemplate(VoucherStatementPageResult result)
         {
             ExcelReportBuilder builder = new();
-            Sheet sheet = new("RemainReport", new ProtectionOptions());
+            Sheet sheet = new("RemainReport");
+            sheet.IsLocked = false;
             var row = builder.AddRow(new List<string> { "کد حساب", "بدهکار", "بستانکار" }, new RowPropertyOptions(new Location("A", 3)));
             var cell = builder.AddCell(result.ReportName, "ReportName",
                 new CellsPropertyOptions(new Location("H", 1)));
@@ -45,9 +46,9 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             sheet.Rows.Add(row2);
             sheet.Cells.Add(cell);
             ColumnProps column = new ColumnProps();
-            column.IsHidden = true;
+            column.IsLocked = true;
             column.ColumnNo = 2;
-            sheet.Columns.Add(column);
+            sheet.Columns = new List<ColumnProps> { column };
             sheet.MergedCells.Add("A1:H2");
             sheet.MergedCells.Add("L17:L18");
             return sheet;

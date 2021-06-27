@@ -44,37 +44,40 @@ namespace ExcelGenerator
                     var xlSheet = xlWorkbook.Worksheets.Add(sheet.Name);
 
                     // Set protection level
-                    var protection = xlSheet.Protect(sheet.ProtectionOptions.Password);
-                    if (sheet.ProtectionOptions.Deletecolumns)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.DeleteColumns;
-                    if (sheet.ProtectionOptions.Editobjects)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.EditObjects;
-                    if (sheet.ProtectionOptions.Formatcells)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.FormatCells;
-                    if (sheet.ProtectionOptions.Formatcolumns)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.FormatColumns;
-                    if (sheet.ProtectionOptions.Formatrows)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.FormatRows;
-                    if (sheet.ProtectionOptions.Insertcolumns)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.InsertColumns;
-                    if (sheet.ProtectionOptions.Inserthyperlinks)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.InsertHyperlinks;
-                    if (sheet.ProtectionOptions.Insertrows)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.InsertRows;
-                    if (sheet.ProtectionOptions.Selectlockedcells)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.SelectLockedCells;
-                    if (sheet.ProtectionOptions.Deleterows)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.DeleteRows;
-                    if (sheet.ProtectionOptions.Editscenarios)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.EditScenarios;
-                    if (sheet.ProtectionOptions.Selectunlockedcells)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.SelectUnlockedCells;
-                    if (sheet.ProtectionOptions.Sort)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.Sort;
-                    if (sheet.ProtectionOptions.UseAutoFilter)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.AutoFilter;
-                    if (sheet.ProtectionOptions.UsePivotTablereports)
-                        protection.Protect().AllowedElements = XLSheetProtectionElements.PivotTables;
+                    if (sheet.IsLocked)
+                    {
+                        var protection = xlSheet.Protect(sheet.ProtectionOptions.Password);
+                        if (sheet.ProtectionOptions.Deletecolumns)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.DeleteColumns;
+                        if (sheet.ProtectionOptions.Editobjects)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.EditObjects;
+                        if (sheet.ProtectionOptions.Formatcells)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.FormatCells;
+                        if (sheet.ProtectionOptions.Formatcolumns)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.FormatColumns;
+                        if (sheet.ProtectionOptions.Formatrows)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.FormatRows;
+                        if (sheet.ProtectionOptions.Insertcolumns)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.InsertColumns;
+                        if (sheet.ProtectionOptions.Inserthyperlinks)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.InsertHyperlinks;
+                        if (sheet.ProtectionOptions.Insertrows)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.InsertRows;
+                        if (sheet.ProtectionOptions.Selectlockedcells)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.SelectLockedCells;
+                        if (sheet.ProtectionOptions.Deleterows)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.DeleteRows;
+                        if (sheet.ProtectionOptions.Editscenarios)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.EditScenarios;
+                        if (sheet.ProtectionOptions.Selectunlockedcells)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.SelectUnlockedCells;
+                        if (sheet.ProtectionOptions.Sort)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.Sort;
+                        if (sheet.ProtectionOptions.UseAutoFilter)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.AutoFilter;
+                        if (sheet.ProtectionOptions.UsePivotTablereports)
+                            protection.Protect().AllowedElements = XLSheetProtectionElements.PivotTables;
+                    }
 
                     // Set direction
                     if (sheet.WSProps.IsRightToLeft is not null)
@@ -130,9 +133,7 @@ namespace ExcelGenerator
                         }
 
                         if (colProps.AutoFit)
-                        {
                             xlSheet.Column(colProps.ColumnNo).AdjustToContents();
-                        }
 
                         if (colProps.IsHidden)
                             xlSheet.Column(colProps.ColumnNo).Hide();
@@ -230,7 +231,6 @@ namespace ExcelGenerator
             // Infer XLDataType and value from "cell" category
             XLDataType? xlDataType;
             object cellValue = cell.Value;
-
             switch (cell.Category)
             {
                 case Category.Number:
@@ -299,8 +299,9 @@ namespace ExcelGenerator
                 locationCell.SetValue(cellValue);
 
             locationCell.Style
-                .Alignment.SetWrapText(cell.Wordwrap)
-                .Protection.SetLocked(isLocked);
+                .Alignment.SetWrapText(cell.Wordwrap);
+
+            locationCell.Style.Protection.SetLocked(isLocked);
 
             if (cellAlignmentHorizontalValue is not null)
                 locationCell.Style.Alignment.SetHorizontal((XLAlignmentHorizontalValues)cellAlignmentHorizontalValue!);

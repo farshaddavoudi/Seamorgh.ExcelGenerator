@@ -6,10 +6,9 @@ namespace ExcelHelper.Reports.ExcelReports
 {
     public class Sheet
     {
-        public Sheet(string name, ProtectionOptions protectionOptions)
+        public Sheet(string name)
         {
             Name = name;
-            ProtectionOptions = protectionOptions;
         }
 
         [Required(ErrorMessage = "Sheet Name is required")]
@@ -22,7 +21,7 @@ namespace ExcelHelper.Reports.ExcelReports
         // TODO: New Property
         public WSProps WSProps { get; set; } = new();
         public bool IsLocked { get; set; } = false;
-        public ProtectionOptions ProtectionOptions { get; set; }
+        public ProtectionOptions ProtectionOptions { get; set; } = new();
 
     }
 }

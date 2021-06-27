@@ -1,6 +1,5 @@
 ﻿using ExcelGenerator;
 using ExcelHelper.Reports.ExcelReports;
-using ExcelHelper.Reports.ExcelReports.PropertyOptions;
 using ExcelHelper.Reports.ExcelReports.Template;
 using ExcelHelper.VoucherStatementReport;
 using System.Collections.Generic;
@@ -26,12 +25,12 @@ namespace MyApp
             {
                 FileName = "TestName",
                 WBProps = new WBProps { DefaultColumnWidth = 40 },
-                Sheets = new List<Sheet> { new("",new ProtectionOptions())
+                Sheets = new List<Sheet> { new("")
                     {
                         Name = "MySheet",
                         Tables = new List<Table>
                         {
-                            new ()
+                            new()
                             {
                                 Rows = new List<Row>
                                 {
@@ -80,12 +79,12 @@ namespace MyApp
                                 OutsideBorder = new Border(LineStyle.Thick, Color.GreenYellow),
                                 MergedCells = new List<string>{ "C5:D6" }
                             },
-                            
+
                         },
                         Columns = new List<ColumnProps>
                         {
                             new (){ColumnNo = 3,Width=new ColumnWidth(10)},
-                            new(){ColumnNo = 1,Width = new ColumnWidth{CalculateType = ColumnWidthCalculateType.AdjustToContents}}
+                            new(){ColumnNo = 1, IsLocked = true,Width = new ColumnWidth{CalculateType = ColumnWidthCalculateType.AdjustToContents}}
                         },
                         Rows = new List<Row>
                         {
