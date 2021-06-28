@@ -47,7 +47,7 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             sheet.Cells.Add(cell);
             ColumnProps column = new ColumnProps();
             column.IsLocked = true;
-            column.ColumnNo = 2;
+            column.ColumnNo = 1;
             sheet.Columns = new List<ColumnProps> { column };
             sheet.MergedCells.Add("A1:H2");
             sheet.MergedCells.Add("L17:L18");

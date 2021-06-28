@@ -10,7 +10,9 @@ namespace ExcelHelper.VoucherStatementReport
             RowResult = new List<VoucherStatementRowResult>();
             Accounts = new List<AccountDto>();
         }
+
         public string ReportName { get; set; }
+
         public decimal FinalRemain { get; set; }
 
         public List<VoucherStatementRowResult> RowResult { get; set; }
