@@ -9,6 +9,16 @@ namespace MyApp
 {
     public static class ExcelReportGenerator
     {
+        public static string VoucherStatementExcelReportUrl(VoucherStatementPageResult result, string basePath, string excelName)
+        {
+            var workBook = new WorkBook { FileName = "FileName" };
+            var sheet1 = SheetTemplates.VoucherStatementTemplate(result);
+            workBook.Sheets.Add(sheet1);
+
+            // Generate Excel from "WorkBook" instance
+            return ExcelService.GenerateExcel(workBook, basePath, excelName);
+        }
+
         public static ExcelGeneratedFileResult VoucherStatementExcelReport(VoucherStatementPageResult result)
         {
             var workBook = new WorkBook { FileName = "FileName" };

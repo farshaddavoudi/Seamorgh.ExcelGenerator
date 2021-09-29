@@ -2,7 +2,6 @@
 using ExcelHelper.VoucherStatementReport;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MyApp.Controllers
 {
@@ -22,12 +21,12 @@ namespace MyApp.Controllers
                     {
                         AccountName = "کارخانه دان-51011" ,
                         Multiplex =new List<Multiplex>
-                        { 
+                        {
                             new Multiplex{After = 5000000,Befor = 4000 },
                         },
 
                     },
-                    new SummaryAccount 
+                    new SummaryAccount
                     {
                         AccountName = "پرورش پولت-51018" ,
                         Multiplex =new List<Multiplex>
@@ -36,7 +35,7 @@ namespace MyApp.Controllers
                         },
 
                     },
-                    new SummaryAccount 
+                    new SummaryAccount
                     {
                         AccountName = "تخم گزار تجاری-51035" ,
                         Multiplex =new List<Multiplex>
@@ -106,11 +105,12 @@ namespace MyApp.Controllers
 
 
             var result2 = ExcelReportGenerator.VoucherStatementExcelReport(arg);
+            var result22Url = ExcelReportGenerator.VoucherStatementExcelReportUrl(arg, @"E:\TestFolder", "MyCustomName");
 
 
             var result = ExcelReportGenerator.TestReport();
 
-            return File(result2.Content, result2.ContentType, result2.FileName);
+            return Ok(result22Url);
         }
     }
 }
