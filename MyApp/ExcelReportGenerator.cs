@@ -11,7 +11,7 @@ namespace MyApp
     {
         public static string VoucherStatementExcelReportUrl(VoucherStatementPageResult result, string basePath, string excelName)
         {
-            var workBook = new ExcelFileModel { FileName = "FileName" };
+            var workBook = new EasyExcelModel { FileName = "FileName" };
             var sheet1 = SheetTemplates.VoucherStatementTemplate(result);
             workBook.Sheets.Add(sheet1);
 
@@ -21,7 +21,7 @@ namespace MyApp
 
         public static GeneratedExcelFile VoucherStatementExcelReport(VoucherStatementPageResult result)
         {
-            var workBook = new ExcelFileModel { FileName = "FileName" };
+            var workBook = new EasyExcelModel { FileName = "FileName" };
             var sheet1 = SheetTemplates.VoucherStatementTemplate(result);
             workBook.Sheets.Add(sheet1);
 
@@ -31,7 +31,7 @@ namespace MyApp
 
         public static GeneratedExcelFile TestReport()
         {
-            var workbook = new ExcelFileModel
+            var workbook = new EasyExcelModel
             {
                 FileName = "TestName",
                 SheetsDefaultStyles = new SheetsDefaultStyle { ColumnWidth = 40 },

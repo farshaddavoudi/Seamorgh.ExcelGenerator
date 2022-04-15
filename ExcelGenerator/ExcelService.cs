@@ -13,29 +13,29 @@ namespace ExcelGenerator
         /// <summary>
         /// Generate Excel file into file result
         /// </summary>
-        /// <param name="excelFileModel"></param>
+        /// <param name="easyExcelModel"></param>
         /// <returns></returns>
-        public static GeneratedExcelFile GenerateExcel(ExcelFileModel excelFileModel)
+        public static GeneratedExcelFile GenerateExcel(EasyExcelModel easyExcelModel)
         {
-            using var xlWorkbook = GenerateExcelFromModel(excelFileModel);
+            using var xlWorkbook = GenerateExcelFromModel(easyExcelModel);
 
             // Save
             using var stream = new MemoryStream();
             xlWorkbook.SaveAs(stream);
             var content = stream.ToArray();
-            return new GeneratedExcelFile { Content = content, FileName = excelFileModel.FileName };
+            return new GeneratedExcelFile { Content = content, FileName = easyExcelModel.FileName };
         }
 
         /// <summary>
         /// Generate Excel file and save it in path and return the saved url
         /// </summary>
-        /// <param name="excelFileModel"></param>
+        /// <param name="easyExcelModel"></param>
         /// <param name="basePath"></param>
         /// <param name="excelFileNameWithoutXlsxExtension"></param>
         /// <returns></returns>
-        public static string GenerateExcel(ExcelFileModel excelFileModel, string basePath, string excelFileNameWithoutXlsxExtension)
+        public static string GenerateExcel(EasyExcelModel easyExcelModel, string basePath, string excelFileNameWithoutXlsxExtension)
         {
-            using var xlWorkbook = GenerateExcelFromModel(excelFileModel);
+            using var xlWorkbook = GenerateExcelFromModel(easyExcelModel);
 
             var saveUrl = $"{basePath}\\{excelFileNameWithoutXlsxExtension}.xlsx";
 
@@ -45,20 +45,20 @@ namespace ExcelGenerator
             return saveUrl;
         }
 
-        private static XLWorkbook GenerateExcelFromModel(ExcelFileModel excelFileModel)
+        private static XLWorkbook GenerateExcelFromModel(EasyExcelModel easyExcelModel)
         {
             //-------------------------------------------
             //  Create Workbook (integrated with using statement)
             //-------------------------------------------
             var xlWorkbook = new XLWorkbook
             {
-                RightToLeft = excelFileModel.SheetsDefaultStyles.IsRightToLeft,
-                ColumnWidth = excelFileModel.SheetsDefaultStyles.ColumnWidth,
-                RowHeight = excelFileModel.SheetsDefaultStyles.RowHeight
+                RightToLeft = easyExcelModel.SheetsDefaultStyles.IsRightToLeft,
+                ColumnWidth = easyExcelModel.SheetsDefaultStyles.ColumnWidth,
+                RowHeight = easyExcelModel.SheetsDefaultStyles.RowHeight
             };
 
             // Check sheet names are unique
-            var sheetNames = excelFileModel.Sheets.Select(s => s.Name).ToList();
+            var sheetNames = easyExcelModel.Sheets.Select(s => s.Name).ToList();
 
             var uniqueSheetNames = sheetNames.Distinct().ToList();
 
@@ -66,13 +66,13 @@ namespace ExcelGenerator
                 throw new Exception("Sheet names should be unique");
 
             // Check any sheet available
-            if (excelFileModel.Sheets.Count == 0)
+            if (easyExcelModel.Sheets.Count == 0)
                 throw new Exception("No sheet is available to create Excel workbook");
 
             //-------------------------------------------
             //  Add Sheets one by one to ClosedXML Workbook instance
             //-------------------------------------------
-            foreach (var sheet in excelFileModel.Sheets)
+            foreach (var sheet in easyExcelModel.Sheets)
             {
                 // Set name
                 var xlSheet = xlWorkbook.Worksheets.Add(sheet.Name);
@@ -131,7 +131,7 @@ namespace ExcelGenerator
                 };
 
                 // Set TextAlign
-                var textAlign = sheet.SheetStyle.SheetDefaultTextAlign ?? excelFileModel.SheetsDefaultStyles.TextAlign;
+                var textAlign = sheet.SheetStyle.SheetDefaultTextAlign ?? easyExcelModel.SheetsDefaultStyles.TextAlign;
 
                 xlSheet.Columns().Style.Alignment.Horizontal = textAlign switch
                 {
@@ -183,7 +183,7 @@ namespace ExcelGenerator
                 {
                     foreach (var tableRow in table.TableRows)
                     {
-                        xlSheet.ConfigureRow(tableRow, sheet.ColumnsStyle, sheet.IsSheetLocked ?? excelFileModel.SheetsDefaultIsLocked);
+                        xlSheet.ConfigureRow(tableRow, sheet.ColumnsStyle, sheet.IsSheetLocked ?? easyExcelModel.SheetsDefaultIsLocked);
                     }
 
                     var tableRange = xlSheet.Range(table.StartCellLocation.Y, table.StartCellLocation.X,
@@ -220,7 +220,7 @@ namespace ExcelGenerator
                 //-------------------------------------------
                 foreach (var row in sheet.SheetRows)
                 {
-                    xlSheet.ConfigureRow(row, sheet.ColumnsStyle, sheet.IsSheetLocked ?? excelFileModel.SheetsDefaultIsLocked);
+                    xlSheet.ConfigureRow(row, sheet.ColumnsStyle, sheet.IsSheetLocked ?? easyExcelModel.SheetsDefaultIsLocked);
                 }
 
                 //-------------------------------------------
@@ -231,7 +231,7 @@ namespace ExcelGenerator
                     if (cell.Visible is false)
                         continue;
 
-                    xlSheet.ConfigureCell(cell, sheet.ColumnsStyle, sheet.IsSheetLocked ?? excelFileModel.SheetsDefaultIsLocked);
+                    xlSheet.ConfigureCell(cell, sheet.ColumnsStyle, sheet.IsSheetLocked ?? easyExcelModel.SheetsDefaultIsLocked);
                 }
 
                 // Apply sheet merges here

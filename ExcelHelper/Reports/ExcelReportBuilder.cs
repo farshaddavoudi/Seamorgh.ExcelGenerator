@@ -11,7 +11,7 @@ namespace ExcelHelper.Reports
 {
     public interface IExcelReportBuilder
     {
-        ExcelFileModel AddFile(string path, string filename);
+        EasyExcelModel AddFile(string path, string filename);
         Sheet AddSheet(string title);
         Row AddRow(object list, RowPropertyOptions options, int emptyCells = 0);
         List<Row> EmptyRows(object list, RowPropertyOptions options, int count = 1);
@@ -23,7 +23,7 @@ namespace ExcelHelper.Reports
     public class ExcelReportBuilder : IExcelReportBuilder
     {
 
-        public ExcelFileModel AddFile(string path, string filename)
+        public EasyExcelModel AddFile(string path, string filename)
         {
             return null;
         }

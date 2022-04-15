@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ExcelHelper.Reports.ExcelReports
 {
-    public class ExcelFileModel
+    public class EasyExcelModel
     {
         [Required(ErrorMessage = "FileName is required")]
         public string FileName { get; set; }
