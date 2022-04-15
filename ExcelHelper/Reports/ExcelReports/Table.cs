@@ -7,25 +7,21 @@ namespace ExcelHelper.Reports.ExcelReports
 {
     public class Table : IValidatableObject
     {
-        public Table()
-        {
-            InlineBorder = new Border(LineStyle.None, Color.Black);
-            OutsideBorder = new Border(LineStyle.None, Color.Black);
-        }
-        public List<Row> Rows { get; set; } = new();
-        public Location StartLocation
+
+        public List<Row> TableRows { get; set; } = new();
+        public CellLocation StartCellLocation
         {
             get
             {
-                return Rows.FirstOrDefault().StartLocation; ;
+                return TableRows.FirstOrDefault().StartCellLocation; ;
             }
         }  //TODO: Discuss with Shahab. The Rows has StartLocation itself, which one should be considered?
         //TODO: StartLocation and EndLocation for Table model are critical and should exist and be exact to create desired result
-        public Location EndLocation
+        public CellLocation EndCellLocation
         {
             get
             {
-                return Rows.LastOrDefault().EndLocation; ;
+                return TableRows.LastOrDefault().EndCellLocation; ;
             }
 
         } //TODO: above question
@@ -33,36 +29,36 @@ namespace ExcelHelper.Reports.ExcelReports
         public Border OutsideBorder { get; set; } = new Border(LineStyle.None, Color.Black);
         public bool IsBordered { get; set; } //TODO? What is this? isn't it the default one?
         public List<string> MergedCells { get; set; } = new();
-        public int RowsCount => Rows.Count;
+        public int RowsCount => TableRows.Count;
 
-        public Location NextHorizontalLocation
+        public CellLocation NextHorizontalCellLocation
         {
             get
             {
-                var y = Rows.LastOrDefault().EndLocation.Y - (Rows.LastOrDefault().EndLocation.Y - Rows.LastOrDefault().StartLocation.Y);
-                return new Location(Rows.LastOrDefault().EndLocation.X + 1, y);
+                var y = TableRows.LastOrDefault().EndCellLocation.Y - (TableRows.LastOrDefault().EndCellLocation.Y - TableRows.LastOrDefault().StartCellLocation.Y);
+                return new CellLocation(TableRows.LastOrDefault().EndCellLocation.X + 1, y);
             }
         }
-        public Location NextVerticalLocation
+        public CellLocation NextVerticalCellLocation
         {
             get
             {
-                var x = Rows.LastOrDefault().EndLocation.X - (Rows.LastOrDefault().EndLocation.X - Rows.LastOrDefault().StartLocation.X);
-                return new Location(x, Rows.LastOrDefault().EndLocation.Y + 1);
+                var x = TableRows.LastOrDefault().EndCellLocation.X - (TableRows.LastOrDefault().EndCellLocation.X - TableRows.LastOrDefault().StartCellLocation.X);
+                return new CellLocation(x, TableRows.LastOrDefault().EndCellLocation.Y + 1);
             }
         }
 
-        public Cell GetCell(Location location)
+        public Cell GetCell(CellLocation cellLocation)
         {
-            return Rows[location.X - 1].Cells[location.Y - 1];
+            return TableRows[cellLocation.X - 1].Cells[cellLocation.Y - 1];
         }
 
-        public List<Cell> GetCells(Location startLocation, Location endLocation)
+        public List<Cell> GetCells(CellLocation startCellLocation, CellLocation endCellLocation)
         {
             List<Cell> cells = new();
-            for (int i = startLocation.Y; i < endLocation.Y; i++)
+            for (int i = startCellLocation.Y; i < endCellLocation.Y; i++)
             {
-                cells.Add(GetCell(new Location(startLocation.X, i)));
+                cells.Add(GetCell(new CellLocation(startCellLocation.X, i)));
             }
 
             return cells;

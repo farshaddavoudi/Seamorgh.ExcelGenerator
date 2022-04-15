@@ -13,29 +13,29 @@ namespace ExcelGenerator
         /// <summary>
         /// Generate Excel file into file result
         /// </summary>
-        /// <param name="workBook"></param>
+        /// <param name="excelFileModel"></param>
         /// <returns></returns>
-        public static ExcelGeneratedFileResult GenerateExcel(WorkBook workBook)
+        public static GeneratedExcelFile GenerateExcel(ExcelFileModel excelFileModel)
         {
-            using var xlWorkbook = GenerateExcelFromModel(workBook);
+            using var xlWorkbook = GenerateExcelFromModel(excelFileModel);
 
             // Save
             using var stream = new MemoryStream();
             xlWorkbook.SaveAs(stream);
             var content = stream.ToArray();
-            return new ExcelGeneratedFileResult { Content = content, FileName = workBook.FileName };
+            return new GeneratedExcelFile { Content = content, FileName = excelFileModel.FileName };
         }
 
         /// <summary>
         /// Generate Excel file and save it in path and return the saved url
         /// </summary>
-        /// <param name="workBook"></param>
+        /// <param name="excelFileModel"></param>
         /// <param name="basePath"></param>
         /// <param name="excelFileNameWithoutXlsxExtension"></param>
         /// <returns></returns>
-        public static string GenerateExcel(WorkBook workBook, string basePath, string excelFileNameWithoutXlsxExtension)
+        public static string GenerateExcel(ExcelFileModel excelFileModel, string basePath, string excelFileNameWithoutXlsxExtension)
         {
-            using var xlWorkbook = GenerateExcelFromModel(workBook);
+            using var xlWorkbook = GenerateExcelFromModel(excelFileModel);
 
             var saveUrl = $"{basePath}\\{excelFileNameWithoutXlsxExtension}.xlsx";
 
@@ -45,20 +45,20 @@ namespace ExcelGenerator
             return saveUrl;
         }
 
-        private static XLWorkbook GenerateExcelFromModel(WorkBook workBook)
+        private static XLWorkbook GenerateExcelFromModel(ExcelFileModel excelFileModel)
         {
             //-------------------------------------------
             //  Create Workbook (integrated with using statement)
             //-------------------------------------------
             var xlWorkbook = new XLWorkbook
             {
-                RightToLeft = workBook.WBProps.IsRightToLeft,
-                ColumnWidth = workBook.WBProps.DefaultColumnWidth,
-                RowHeight = workBook.WBProps.DefaultRowHeight
+                RightToLeft = excelFileModel.SheetsDefaultStyles.IsRightToLeft,
+                ColumnWidth = excelFileModel.SheetsDefaultStyles.ColumnWidth,
+                RowHeight = excelFileModel.SheetsDefaultStyles.RowHeight
             };
 
             // Check sheet names are unique
-            var sheetNames = workBook.Sheets.Select(s => s.Name).ToList();
+            var sheetNames = excelFileModel.Sheets.Select(s => s.Name).ToList();
 
             var uniqueSheetNames = sheetNames.Distinct().ToList();
 
@@ -66,71 +66,74 @@ namespace ExcelGenerator
                 throw new Exception("Sheet names should be unique");
 
             // Check any sheet available
-            if (workBook.Sheets.Count == 0)
+            if (excelFileModel.Sheets.Count == 0)
                 throw new Exception("No sheet is available to create Excel workbook");
 
             //-------------------------------------------
             //  Add Sheets one by one to ClosedXML Workbook instance
             //-------------------------------------------
-            foreach (var sheet in workBook.Sheets)
+            foreach (var sheet in excelFileModel.Sheets)
             {
                 // Set name
                 var xlSheet = xlWorkbook.Worksheets.Add(sheet.Name);
 
                 // Set protection level
-                var protection = xlSheet.Protect(sheet.ProtectionOptions.Password);
-                if (sheet.ProtectionOptions.Deletecolumns)
+                var protection = xlSheet.Protect(sheet.SheetProtectionLevels.Password);
+                if (sheet.SheetProtectionLevels.Deletecolumns)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.DeleteColumns;
-                if (sheet.ProtectionOptions.Editobjects)
+                if (sheet.SheetProtectionLevels.Editobjects)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.EditObjects;
-                if (sheet.ProtectionOptions.Formatcells)
+                if (sheet.SheetProtectionLevels.Formatcells)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.FormatCells;
-                if (sheet.ProtectionOptions.Formatcolumns)
+                if (sheet.SheetProtectionLevels.Formatcolumns)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.FormatColumns;
-                if (sheet.ProtectionOptions.Formatrows)
+                if (sheet.SheetProtectionLevels.Formatrows)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.FormatRows;
-                if (sheet.ProtectionOptions.Insertcolumns)
+                if (sheet.SheetProtectionLevels.Insertcolumns)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.InsertColumns;
-                if (sheet.ProtectionOptions.Inserthyperlinks)
+                if (sheet.SheetProtectionLevels.Inserthyperlinks)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.InsertHyperlinks;
-                if (sheet.ProtectionOptions.Insertrows)
+                if (sheet.SheetProtectionLevels.Insertrows)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.InsertRows;
-                if (sheet.ProtectionOptions.Selectlockedcells)
+                if (sheet.SheetProtectionLevels.Selectlockedcells)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.SelectLockedCells;
-                if (sheet.ProtectionOptions.Deleterows)
+                if (sheet.SheetProtectionLevels.Deleterows)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.DeleteRows;
-                if (sheet.ProtectionOptions.Editscenarios)
+                if (sheet.SheetProtectionLevels.Editscenarios)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.EditScenarios;
-                if (sheet.ProtectionOptions.Selectunlockedcells)
+                if (sheet.SheetProtectionLevels.Selectunlockedcells)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.SelectUnlockedCells;
-                if (sheet.ProtectionOptions.Sort)
+                if (sheet.SheetProtectionLevels.Sort)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.Sort;
-                if (sheet.ProtectionOptions.UseAutoFilter)
+                if (sheet.SheetProtectionLevels.UseAutoFilter)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.AutoFilter;
-                if (sheet.ProtectionOptions.UsePivotTablereports)
+                if (sheet.SheetProtectionLevels.UsePivotTablereports)
                     protection.Protect().AllowedElements = XLSheetProtectionElements.PivotTables;
 
                 // Set direction
-                if (sheet.WSProps.IsRightToLeft is not null)
-                    xlSheet.RightToLeft = (bool)sheet.WSProps.IsRightToLeft;
+                if (sheet.SheetStyle.IsRightToLeft is not null)
+                    xlSheet.RightToLeft = (bool)sheet.SheetStyle.IsRightToLeft;
 
                 // Set default column width
-                if (sheet.WSProps.DefaultColumnWidth is not null)
-                    xlSheet.ColumnWidth = (double)sheet.WSProps.DefaultColumnWidth;
+                if (sheet.SheetStyle.DefaultColumnWidth is not null)
+                    xlSheet.ColumnWidth = (double)sheet.SheetStyle.DefaultColumnWidth;
 
                 // Set default row height
-                if (sheet.WSProps.DefaultRowHeight is not null)
-                    xlSheet.RowHeight = (double)sheet.WSProps.DefaultRowHeight;
+                if (sheet.SheetStyle.DefaultRowHeight is not null)
+                    xlSheet.RowHeight = (double)sheet.SheetStyle.DefaultRowHeight;
 
                 // Set visibility
-                xlSheet.Visibility = sheet.WSProps.Visibility switch
+                xlSheet.Visibility = sheet.SheetStyle.Visibility switch
                 {
                     SheetVisibility.Hidden => XLWorksheetVisibility.Hidden,
                     SheetVisibility.VeryHidden => XLWorksheetVisibility.VeryHidden,
                     _ => XLWorksheetVisibility.Visible
                 };
 
-                xlSheet.Columns().Style.Alignment.Horizontal = sheet.WSProps.DefaultTextAlign switch
+                // Set TextAlign
+                var textAlign = sheet.SheetStyle.SheetDefaultTextAlign ?? excelFileModel.SheetsDefaultStyles.TextAlign;
+
+                xlSheet.Columns().Style.Alignment.Horizontal = textAlign switch
                 {
                     TextAlign.Center => XLAlignmentHorizontalValues.Center,
                     TextAlign.Right => XLAlignmentHorizontalValues.Right,
@@ -142,7 +145,7 @@ namespace ExcelGenerator
                 //-------------------------------------------
                 //  Columns properties
                 //-------------------------------------------
-                foreach (var colProps in sheet.Columns)
+                foreach (var colProps in sheet.ColumnsStyle)
                 {
                     // Infer XLAlignment from "ColumnProp"
                     var columnAlignmentHorizontalValue = colProps.TextAlign switch
@@ -156,7 +159,7 @@ namespace ExcelGenerator
 
                     if (colProps.Width is not null)
                     {
-                        if (colProps.Width.CalculateType == ColumnWidthCalculateType.AdjustToContents)
+                        if (colProps.Width.CalculationType == ColumnWidthCalculationType.AdjustToContents)
                             xlSheet.Column(colProps.ColumnNo).AdjustToContents();
 
                         else
@@ -176,15 +179,15 @@ namespace ExcelGenerator
                 //-------------------------------------------
                 //  Map Tables
                 //-------------------------------------------
-                foreach (var table in sheet.Tables)
+                foreach (var table in sheet.SheetTables)
                 {
-                    foreach (var tableRow in table.Rows)
+                    foreach (var tableRow in table.TableRows)
                     {
-                        xlSheet.ConfigureRow(tableRow, sheet.Columns, sheet.IsLocked);
+                        xlSheet.ConfigureRow(tableRow, sheet.ColumnsStyle, sheet.IsSheetLocked ?? excelFileModel.SheetsDefaultIsLocked);
                     }
 
-                    var tableRange = xlSheet.Range(table.StartLocation.Y, table.StartLocation.X,
-                        table.EndLocation.Y, table.EndLocation.X);
+                    var tableRange = xlSheet.Range(table.StartCellLocation.Y, table.StartCellLocation.X,
+                        table.EndCellLocation.Y, table.EndCellLocation.X);
 
                     // Config Outside-Border
                     XLBorderStyleValues? outsideBorder = GetXlBorderLineStyle(table.OutsideBorder.LineStyle);
@@ -215,20 +218,20 @@ namespace ExcelGenerator
                 //-------------------------------------------
                 //  Map Rows 
                 //-------------------------------------------
-                foreach (var row in sheet.Rows)
+                foreach (var row in sheet.SheetRows)
                 {
-                    xlSheet.ConfigureRow(row, sheet.Columns, sheet.IsLocked);
+                    xlSheet.ConfigureRow(row, sheet.ColumnsStyle, sheet.IsSheetLocked ?? excelFileModel.SheetsDefaultIsLocked);
                 }
 
                 //-------------------------------------------
                 //  Map Cells
                 //-------------------------------------------
-                foreach (var cell in sheet.Cells)
+                foreach (var cell in sheet.SheetCells)
                 {
                     if (cell.Visible is false)
                         continue;
 
-                    xlSheet.ConfigureCell(cell, sheet.Columns, sheet.IsLocked);
+                    xlSheet.ConfigureCell(cell, sheet.ColumnsStyle, sheet.IsSheetLocked ?? excelFileModel.SheetsDefaultIsLocked);
                 }
 
                 // Apply sheet merges here
@@ -247,7 +250,7 @@ namespace ExcelGenerator
             return xlWorkbook;
         }
 
-        private static void ConfigureCell(this IXLWorksheet xlSheet, Cell cell, List<ColumnProps> columnProps, bool isSheetLocked)
+        private static void ConfigureCell(this IXLWorksheet xlSheet, Cell cell, List<ColumnStyle> columnProps, bool isSheetLocked)
         {
             // Infer XLDataType and value from "cell" category
             XLDataType? xlDataType;
@@ -308,7 +311,7 @@ namespace ExcelGenerator
 
             if (isLocked is null)
             { // Get from ColumnProps level
-                var x = cell.Location.X;
+                var x = cell.CellLocation.X;
 
                 var relatedColumnProp = columnProps.SingleOrDefault(c => c.ColumnNo == x);
 
@@ -323,7 +326,7 @@ namespace ExcelGenerator
             //-------------------------------------------
             //  Map column per Cells loop cycle
             //-------------------------------------------
-            var locationCell = xlSheet.Cell(cell.Location.Y, cell.Location.X);
+            var locationCell = xlSheet.Cell(cell.CellLocation.Y, cell.CellLocation.X);
 
             if (xlDataType is not null)
                 locationCell.SetDataType((XLDataType)xlDataType);
@@ -342,7 +345,7 @@ namespace ExcelGenerator
                 locationCell.Style.Alignment.SetHorizontal((XLAlignmentHorizontalValues)cellAlignmentHorizontalValue!);
         }
 
-        private static void ConfigureRow(this IXLWorksheet xlSheet, Row row, List<ColumnProps> columnProps, bool isSheetLocked)
+        private static void ConfigureRow(this IXLWorksheet xlSheet, Row row, List<ColumnStyle> columnProps, bool isSheetLocked)
         {
             foreach (var rowCell in row.Cells)
             {
@@ -361,14 +364,14 @@ namespace ExcelGenerator
 
             if (row.Cells.Count != 0)
             {
-                if (row.StartLocation is not null && row.EndLocation is not null)
+                if (row.StartCellLocation is not null && row.EndCellLocation is not null)
                 {
-                    var xlRow = xlSheet.Row(row.Cells.First().Location.Y);
+                    var xlRow = xlSheet.Row(row.Cells.First().CellLocation.Y);
                     if (row.Height is not null)
                         xlRow.Height = (double)row.Height;
 
-                    var xlRowRange = xlSheet.Range(row.StartLocation.Y, row.StartLocation.X, row.EndLocation.Y,
-                        row.EndLocation.X);
+                    var xlRowRange = xlSheet.Range(row.StartCellLocation.Y, row.StartCellLocation.X, row.EndCellLocation.Y,
+                        row.EndCellLocation.X);
                     xlRowRange.Style.Font.SetFontColor(XLColor.FromColor(row.ForeColor));
                     xlRowRange.Style.Fill.SetBackgroundColor(XLColor.FromColor(row.BackColor));
 
@@ -385,7 +388,7 @@ namespace ExcelGenerator
                 }
                 else
                 {
-                    var xlRow = xlSheet.Row(row.Cells.First().Location.Y);
+                    var xlRow = xlSheet.Row(row.Cells.First().CellLocation.Y);
                     if (row.Height is not null)
                         xlRow.Height = (double)row.Height;
                     xlRow.Style.Font.SetFontColor(XLColor.FromColor(row.ForeColor));

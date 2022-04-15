@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ExcelGenerator\ExcelGenerator.csproj" />
+    <ProjectReference Include="..\ExcelHelper\ExcelHelper.csproj" />
   </ItemGroup>
 
 </Project>

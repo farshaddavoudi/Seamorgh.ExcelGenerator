@@ -1,10 +1,10 @@
 ﻿namespace ExcelHelper.Reports.ExcelReports
 {
-    public class WSProps
+    public class SheetStyle
     {
         public bool? IsRightToLeft { get; set; } = null;
 
-        public TextAlign DefaultTextAlign { get; set; } = TextAlign.Right;
+        public TextAlign? SheetDefaultTextAlign { get; set; } = null;
 
         /// <summary>
         /// Default column width for this worksheet.

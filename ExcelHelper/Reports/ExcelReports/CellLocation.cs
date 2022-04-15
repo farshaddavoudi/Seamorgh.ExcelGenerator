@@ -2,14 +2,14 @@
 
 namespace ExcelHelper.Reports.ExcelReports
 {
-    public class Location
+    public class CellLocation
     {
-        public Location(string x, int y)
+        public CellLocation(string x, int y)
         {
             X = NumberFromExcelCell(x);
             Y = y;
         }
-        public Location(int x, int y)
+        public CellLocation(int x, int y)
         {
             X = x;
             Y = y;

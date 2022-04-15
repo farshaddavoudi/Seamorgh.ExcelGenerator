@@ -6,12 +6,12 @@ namespace ExcelHelper.Reports.ExcelReports.PropertyOptions
 {
     public abstract class PropertyOption
     {
-        public PropertyOption(Location startLocation)
+        public PropertyOption(CellLocation startCellLocation)
         {
-            StartLocation = startLocation;
+            StartCellLocation = startCellLocation;
         }
 
-        public Location StartLocation { get; set; }
+        public CellLocation StartCellLocation { get; set; }
         public Color BackColor { get; set; } = Color.White;
         public Color ForeColor { get; set; } = Color.Black;
         [DefaultValue(true)]

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ExcelHelper.Reports.ExcelReports
 {
-    public class ColumnProps : IValidatableObject
+    public class ColumnStyle : IValidatableObject
     {
         [Required(ErrorMessage = "ColumnNo is required")]
         public int ColumnNo { get; set; }
@@ -21,7 +21,7 @@ namespace ExcelHelper.Reports.ExcelReports
 
             if (Width is not null)
             {
-                if (Width.CalculateType == ColumnWidthCalculateType.ExplicitValue && Width.Value is null)
+                if (Width.CalculationType == ColumnWidthCalculationType.ExplicitValue && Width.Value is null)
                     yield return new ValidationResult(
                         "Column width value should be specified when CalculateType is set to explicit value",
                         new List<string> { nameof(Width.Value) });
@@ -29,7 +29,7 @@ namespace ExcelHelper.Reports.ExcelReports
         }
     }
 
-    public enum ColumnWidthCalculateType
+    public enum ColumnWidthCalculationType
     {
         ExplicitValue,
         AdjustToContents
@@ -47,7 +47,7 @@ namespace ExcelHelper.Reports.ExcelReports
             Value = width;
         }
 
-        public ColumnWidthCalculateType CalculateType { get; set; } = ColumnWidthCalculateType.ExplicitValue;
+        public ColumnWidthCalculationType CalculationType { get; set; } = ColumnWidthCalculationType.ExplicitValue;
 
         public double? Value { get; set; }
     }

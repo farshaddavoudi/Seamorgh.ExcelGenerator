@@ -11,7 +11,7 @@ namespace ExcelHelper.Reports
 {
     public interface IExcelReportBuilder
     {
-        WorkBook AddFile(string path, string filename);
+        ExcelFileModel AddFile(string path, string filename);
         Sheet AddSheet(string title);
         Row AddRow(object list, RowPropertyOptions options, int emptyCells = 0);
         List<Row> EmptyRows(object list, RowPropertyOptions options, int count = 1);
@@ -23,7 +23,7 @@ namespace ExcelHelper.Reports
     public class ExcelReportBuilder : IExcelReportBuilder
     {
 
-        public WorkBook AddFile(string path, string filename)
+        public ExcelFileModel AddFile(string path, string filename)
         {
             return null;
         }
@@ -44,12 +44,12 @@ namespace ExcelHelper.Reports
             {
 
                 Row row = new();
-                var location = new Location(options.StartLocation.X, options.StartLocation.Y);
+                var location = new CellLocation(options.StartCellLocation.X, options.StartCellLocation.Y);
                 foreach (var cell in cells)
                 {
                     if (cell is string)
                     {
-                        row.Cells.Add(AddCell(cell, "", new CellsPropertyOptions(new Location(location.X, location.Y))));
+                        row.Cells.Add(AddCell(cell, "", new CellsPropertyOptions(new CellLocation(location.X, location.Y))));
                         location.X++;
                     }
                     else
@@ -64,13 +64,13 @@ namespace ExcelHelper.Reports
                                 {
                                     if (attr.Visible != false)
                                     {
-                                        row.Cells.Add(AddCell(cell, prop.Name, new CellsPropertyOptions(new Location(location.X, location.Y))));
+                                        row.Cells.Add(AddCell(cell, prop.Name, new CellsPropertyOptions(new CellLocation(location.X, location.Y))));
                                         location.X++;
                                     }
                                 }
                                 else
                                 {
-                                    row.Cells.Add(AddCell(cell, prop.Name, new CellsPropertyOptions(new Location(location.X, location.Y))));
+                                    row.Cells.Add(AddCell(cell, prop.Name, new CellsPropertyOptions(new CellLocation(location.X, location.Y))));
                                     location.X++;
                                 }
                             }
@@ -78,7 +78,7 @@ namespace ExcelHelper.Reports
                     }
                     for (int i = 0; i < emptyCells; i++)
                     {
-                        row.Cells.Add(AddCell("", "", new CellsPropertyOptions(new Location(location.X, location.Y))));
+                        row.Cells.Add(AddCell("", "", new CellsPropertyOptions(new CellLocation(location.X, location.Y))));
                         location.X++;
 
                     }
@@ -92,11 +92,11 @@ namespace ExcelHelper.Reports
         {
             if (list is IEnumerable cells)
             {
-                var location = new Location(options.StartLocation.X, options.StartLocation.Y);
+                var location = new CellLocation(options.StartCellLocation.X, options.StartCellLocation.Y);
                 Row row = new();
                 foreach (var cell in cells)
                 {
-                    row.Cells.Add(AddCell(string.Empty, string.Empty, new CellsPropertyOptions(new Location(location.X, location.Y))));
+                    row.Cells.Add(AddCell(string.Empty, string.Empty, new CellsPropertyOptions(new CellLocation(location.X, location.Y))));
                     location.X++;
                 }
                 return row;
@@ -118,12 +118,12 @@ namespace ExcelHelper.Reports
             if (list is IEnumerable rows)
             {
                 Table table = new();
-                var location = options.StartLocation;
+                var location = options.StartCellLocation;
                 //table.StartLocation = new Location(location.X, location.Y);
                 //table.EndLocation = new Location(location.X, location.Y);
                 foreach (var item in rows)
                 {
-                    table.Rows.Add(AddRow(new List<object> { item }, new RowPropertyOptions(location)));
+                    table.TableRows.Add(AddRow(new List<object> { item }, new RowPropertyOptions(location)));
                     location.Y++;
                 }
                 //table.EndLocation = location;
@@ -153,7 +153,7 @@ namespace ExcelHelper.Reports
 
         private static Cell ConfigCell(object cellObj, string cellName, CellsPropertyOptions options)
         {
-            Cell cell = new(options.StartLocation) { Location = options.StartLocation };
+            Cell cell = new(options.StartCellLocation) { CellLocation = options.StartCellLocation };
             if (cellObj is string)
             {
                 cell.Value = cellObj;

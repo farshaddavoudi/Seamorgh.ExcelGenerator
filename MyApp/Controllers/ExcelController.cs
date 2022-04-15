@@ -105,7 +105,7 @@ namespace MyApp.Controllers
 
 
             var result2 = ExcelReportGenerator.VoucherStatementExcelReport(arg);
-            var result22Url = ExcelReportGenerator.VoucherStatementExcelReportUrl(arg, @"E:\TestFolder", "MyCustomName");
+            var result22Url = ExcelReportGenerator.VoucherStatementExcelReportUrl(arg, @"C:\LocalNugets", "MyCustomName");
 
 
             var result = ExcelReportGenerator.TestReport();

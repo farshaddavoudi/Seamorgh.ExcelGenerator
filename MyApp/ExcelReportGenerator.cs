@@ -11,7 +11,7 @@ namespace MyApp
     {
         public static string VoucherStatementExcelReportUrl(VoucherStatementPageResult result, string basePath, string excelName)
         {
-            var workBook = new WorkBook { FileName = "FileName" };
+            var workBook = new ExcelFileModel { FileName = "FileName" };
             var sheet1 = SheetTemplates.VoucherStatementTemplate(result);
             workBook.Sheets.Add(sheet1);
 
@@ -19,9 +19,9 @@ namespace MyApp
             return ExcelService.GenerateExcel(workBook, basePath, excelName);
         }
 
-        public static ExcelGeneratedFileResult VoucherStatementExcelReport(VoucherStatementPageResult result)
+        public static GeneratedExcelFile VoucherStatementExcelReport(VoucherStatementPageResult result)
         {
-            var workBook = new WorkBook { FileName = "FileName" };
+            var workBook = new ExcelFileModel { FileName = "FileName" };
             var sheet1 = SheetTemplates.VoucherStatementTemplate(result);
             workBook.Sheets.Add(sheet1);
 
@@ -29,26 +29,26 @@ namespace MyApp
             return ExcelService.GenerateExcel(workBook);
         }
 
-        public static ExcelGeneratedFileResult TestReport()
+        public static GeneratedExcelFile TestReport()
         {
-            var workbook = new WorkBook
+            var workbook = new ExcelFileModel
             {
                 FileName = "TestName",
-                WBProps = new WBProps { DefaultColumnWidth = 40 },
+                SheetsDefaultStyles = new SheetsDefaultStyle { ColumnWidth = 40 },
                 Sheets = new List<Sheet> { new("")
                     {
                         Name = "MySheet",
-                        Tables = new List<Table>
+                        SheetTables = new List<Table>
                         {
                             new()
                             {
-                                Rows = new List<Row>
+                                TableRows = new List<Row>
                                 {
                                     new()
                                     {
                                         Cells = new List<Cell>
                                         {
-                                            new(new Location(3,5)){Value = "احمد", Category =Category.Text, TextAlign = TextAlign.Center}
+                                            new(new CellLocation(3,5)){Value = "احمد", Category =Category.Text, TextAlign = TextAlign.Center}
                                         },
                                         MergedCellsList = new(){"C5:D5"},
                                         //StartLocation = new Location(3,5),
@@ -61,7 +61,7 @@ namespace MyApp
                                     {
                                         Cells = new List<Cell>
                                         {
-                                            new(new Location(3,6)){Value = "کامبیز دیرباز", Category =Category.Text, TextAlign = TextAlign.Center}
+                                            new(new CellLocation(3,6)){Value = "کامبیز دیرباز", Category =Category.Text, TextAlign = TextAlign.Center}
                                         },
                                         MergedCellsList = new(){"C6:D6"},
                                         //StartLocation = new Location(3,6),
@@ -74,7 +74,7 @@ namespace MyApp
                                     {
                                         Cells = new List<Cell>
                                         {
-                                            new(new Location(3,7)){Value = "اصغر فرهادی", Category =Category.Text, TextAlign = TextAlign.Center}
+                                            new(new CellLocation(3,7)){Value = "اصغر فرهادی", Category =Category.Text, TextAlign = TextAlign.Center}
                                         },
                                         MergedCellsList = new(){"C7:D7"},
                                         //StartLocation = new Location(3,7),
@@ -91,18 +91,18 @@ namespace MyApp
                             },
 
                         },
-                        Columns = new List<ColumnProps>
+                        ColumnsStyle = new List<ColumnStyle>
                         {
                             new (){ColumnNo = 3,Width=new ColumnWidth(10)},
-                            new(){ColumnNo = 1, IsLocked = true,Width = new ColumnWidth{CalculateType = ColumnWidthCalculateType.AdjustToContents}}
+                            new(){ColumnNo = 1, IsLocked = true,Width = new ColumnWidth{CalculationType = ColumnWidthCalculationType.AdjustToContents}}
                         },
-                        Rows = new List<Row>
+                        SheetRows = new List<Row>
                         {
                             new()
                             {
                                 Cells = new List<Cell>
                                 {
-                                    new(new Location(3,2)){Value = "فرشاد", Category =Category.Text, TextAlign = TextAlign.Right}
+                                    new(new CellLocation(3,2)){Value = "فرشاد", Category =Category.Text, TextAlign = TextAlign.Right}
                                 },
                                 MergedCellsList = new(){"C2:D2"},
                                 //StartLocation = new Location(2,2),
@@ -112,14 +112,14 @@ namespace MyApp
                                 OutsideBorder = new Border(LineStyle.DashDotDot, Color.Red)
                             }
     },
-                        Cells = new List<Cell>
+                        SheetCells = new List<Cell>
                         {
-                            new Cell(new Location("A",1)){Value = 11, Category = Category.Percentage, TextAlign = TextAlign.Left
+                            new Cell(new CellLocation("A",1)){Value = 11, Category = Category.Percentage, TextAlign = TextAlign.Left
 },
-                            new Cell(new Location(2, 1)) { Value = 112343, Category = Category.Currency },
-                            new Cell(new Location("D", 1)) { Value = 112 },
-                            new Cell(new Location(1, 2)) { Value = 211, TextAlign = TextAlign.Center },
-                            new Cell(new Location(2, 2)) { Value = 212 },
+                            new Cell(new CellLocation(2, 1)) { Value = 112343, Category = Category.Currency },
+                            new Cell(new CellLocation("D", 1)) { Value = 112 },
+                            new Cell(new CellLocation(1, 2)) { Value = 211, TextAlign = TextAlign.Center },
+                            new Cell(new CellLocation(2, 2)) { Value = 212 },
                         },
                     }
                 }

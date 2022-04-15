@@ -1,6 +1,6 @@
 ﻿namespace ExcelGenerator
 {
-    public class ExcelGeneratedFileResult
+    public class GeneratedExcelFile
     {
         public string FileName { get; set; }
 

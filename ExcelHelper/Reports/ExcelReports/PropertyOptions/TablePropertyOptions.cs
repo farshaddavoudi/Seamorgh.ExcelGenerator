@@ -2,7 +2,7 @@
 {
     public class TablePropertyOptions : PropertyOption
     {
-        public TablePropertyOptions(Location startLocation) : base(startLocation) { }
+        public TablePropertyOptions(CellLocation startCellLocation) : base(startCellLocation) { }
         public bool IsBordered { get; set; }
         public int BorderSize { get; set; }
         public string BorderType { get; set; }

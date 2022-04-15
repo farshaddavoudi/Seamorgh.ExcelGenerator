@@ -1,6 +1,6 @@
 ﻿namespace ExcelHelper.Reports
 {
-    public class PropDefaults
+    public class SheetDefaults
     {
         public static readonly double ColumnWidth = 20;
 

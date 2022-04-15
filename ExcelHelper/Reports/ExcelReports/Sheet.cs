@@ -13,15 +13,14 @@ namespace ExcelHelper.Reports.ExcelReports
 
         [Required(ErrorMessage = "Sheet Name is required")]
         public string Name { get; set; }
-        public List<Row> Rows { get; set; } = new();
-        public List<ColumnProps> Columns { get; set; } = new();
-        public List<Cell> Cells { get; set; } = new();
-        public List<Table> Tables { get; set; } = new();
+        public List<Row> SheetRows { get; set; } = new();
+        public List<ColumnStyle> ColumnsStyle { get; set; } = new();
+        public List<Cell> SheetCells { get; set; } = new();
+        public List<Table> SheetTables { get; set; } = new();
         public List<string> MergedCells { get; set; } = new();
         // TODO: New Property
-        public WSProps WSProps { get; set; } = new();
-        public bool IsLocked { get; set; } = false;
-        public ProtectionOptions ProtectionOptions { get; set; } = new();
-
+        public SheetStyle SheetStyle { get; set; } = new();
+        public bool? IsSheetLocked { get; set; }
+        public ProtectionLevels SheetProtectionLevels { get; set; } = new();
     }
 }

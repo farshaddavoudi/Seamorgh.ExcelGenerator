@@ -15,18 +15,18 @@ namespace ExcelHelper.Reports.ExcelReports
             OutsideBorder = new Border(LineStyle.None, Color.Black);
             MergedCellsList = new();
         }
-        public Location StartLocation 
+        public CellLocation StartCellLocation 
         {
             get
             {
-                return Cells.FirstOrDefault().Location ;
+                return Cells.FirstOrDefault().CellLocation ;
             }
         }
-        public Location EndLocation 
+        public CellLocation EndCellLocation 
         {
             get
             {
-                return Cells.LastOrDefault().Location;
+                return Cells.LastOrDefault().CellLocation;
             }
         }
         public Color BackColor { get; set; } = Color.White;
@@ -41,43 +41,43 @@ namespace ExcelHelper.Reports.ExcelReports
         public string Formulas { get; set; }
         public int CellsCount => Cells.Count;
 
-        public Location NextHorizontalLocation
+        public CellLocation NextHorizontalCellLocation
         {
             get
             {
-                var y = EndLocation.Y - (EndLocation.Y - StartLocation.Y);
-                return new Location(EndLocation.X + 1, y);
+                var y = EndCellLocation.Y - (EndCellLocation.Y - StartCellLocation.Y);
+                return new CellLocation(EndCellLocation.X + 1, y);
 
             }
         }
 
         public Cell AddCell()
         {
-            Cell cell = new(NextHorizontalLocation);
+            Cell cell = new(NextHorizontalCellLocation);
             Cells.Add(cell);
             return cell;
         }
 
-        public Location NextVerticalLocation
+        public CellLocation NextVerticalCellLocation
         {
             get
             {
-                var x = EndLocation.X - (EndLocation.X - StartLocation.X); //TODO: ?? (x-(x-y) => answer always is y)
-                return new Location(x, EndLocation.Y + 1);
+                var x = EndCellLocation.X - (EndCellLocation.X - StartCellLocation.X); //TODO: ?? (x-(x-y) => answer always is y)
+                return new CellLocation(x, EndCellLocation.Y + 1);
 
             }
         }
 
         public Cell GetCell(int X)
         {
-            return Cells.FirstOrDefault(x => x.Location.X == X);
+            return Cells.FirstOrDefault(x => x.CellLocation.X == X);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             // Check if StartLocation exist, EndLocation should exist too ////TODO: Discuss with Shahab is it true validation or not
-            if (StartLocation is not null && EndLocation is null ||
-                StartLocation is null && EndLocation is not null)
+            if (StartCellLocation is not null && EndCellLocation is null ||
+                StartCellLocation is null && EndCellLocation is not null)
                 yield return new ValidationResult(
                     "Both StartLocation and EndLocation of Row should be null or not null simultaneously");
 
@@ -86,11 +86,11 @@ namespace ExcelHelper.Reports.ExcelReports
             // Checks Row cells have all Y location //TODO: Discuss with Shahab is it true validation or not
             if (Cells.Count != 0)
             {
-                var firstCellYLoc = Cells.First().Location.Y;
+                var firstCellYLoc = Cells.First().CellLocation.Y;
 
                 foreach (var cell in Cells)
                 {
-                    if (cell.Location.Y != firstCellYLoc)
+                    if (cell.CellLocation.Y != firstCellYLoc)
                         yield return new ValidationResult("All row cells should have same Y location");
                 }
             }
@@ -105,7 +105,7 @@ namespace ExcelHelper.Reports.ExcelReports
                 // A2:B2 should be along with cells with locationY=2 //TODO: Confirm it with Shahab
                 foreach (var c in cellsToMerge!.ToCharArray())
                 {
-                    if (c.ToString().IsNumber() && Cells.Count != 0 && Convert.ToInt32(c.ToString()) != Cells.First()?.Location.Y)
+                    if (c.ToString().IsNumber() && Cells.Count != 0 && Convert.ToInt32(c.ToString()) != Cells.First()?.CellLocation.Y)
                     {
                         yield return new ValidationResult("In MergedCell Az:Bz the z should be the same with Row Y location");
                     }

@@ -3,14 +3,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ExcelHelper.Reports.ExcelReports
 {
-    public class WorkBook
+    public class ExcelFileModel
     {
         [Required(ErrorMessage = "FileName is required")]
         public string FileName { get; set; }
-        public string Path { get; set; } //TODO: Remove this property
+
         public List<Sheet> Sheets { get; set; } = new();
 
-        // TODO: New Property 
-        public WBProps WBProps { get; set; } = new();
+        public SheetsDefaultStyle SheetsDefaultStyles { get; set; } = new();
+
+        public bool SheetsDefaultIsLocked { get; set; } = false;
     }
 }

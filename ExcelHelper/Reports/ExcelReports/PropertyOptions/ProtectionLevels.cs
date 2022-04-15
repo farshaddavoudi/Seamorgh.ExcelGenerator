@@ -1,6 +1,6 @@
 ﻿namespace ExcelHelper.Reports.ExcelReports.PropertyOptions
 {
-    public class ProtectionOptions
+    public class ProtectionLevels
     {
         public string Password { get; set; }
         public bool Selectlockedcells { get; set; }
