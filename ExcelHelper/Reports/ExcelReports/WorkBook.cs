@@ -11,6 +11,6 @@ namespace ExcelHelper.Reports.ExcelReports
         public List<Sheet> Sheets { get; set; } = new();
 
         // TODO: New Property 
-        public WBProps WBProps { get; set; } = new();
+        public SheetsDefaultStyles SheetsDefaultStyles { get; set; } = new();
     }
 }

@@ -4,13 +4,13 @@ namespace ExcelHelper.Reports.ExcelReports
 {
     public class Border
     {
-        public Border(LineStyle lineStyle, Color color)
+        public Border(LineStyle borderLineStyle, Color borderColor)
         {
-            LineStyle = lineStyle;
-            Color = color;
+            BorderLineStyle = borderLineStyle;
+            BorderColor = borderColor;
         }
 
-        public LineStyle LineStyle { get; set; }
-        public Color Color { get; set; }
+        public LineStyle BorderLineStyle { get; set; }
+        public Color BorderColor { get; set; }
     }
 }

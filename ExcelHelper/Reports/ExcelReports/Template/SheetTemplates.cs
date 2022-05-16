@@ -12,27 +12,27 @@ namespace ExcelHelper.Reports.ExcelReports.Template
             ExcelReportBuilder builder = new();
             Sheet sheet = new("RemainReport");
             sheet.IsLocked = false;
-            var row = builder.AddRow(new List<string> { "کد حساب", "بدهکار", "بستانکار" }, new RowPropertyOptions(new Location("A", 3)));
+            var row = builder.AddRow(new List<string> { "کد حساب", "بدهکار", "بستانکار" }, new RowPropertyOptions(new CellLocation("A", 3)));
             var cell = builder.AddCell(result.ReportName, "ReportName",
-                new CellsPropertyOptions(new Location("H", 1)));
-            var table = builder.AddTable(result.RowResult, new TablePropertyOptions(new Location("A", 4)));
-            var currentLocation = table.NextVerticalLocation;
+                new CellsPropertyOptions(new CellLocation("H", 1)));
+            var table = builder.AddTable(result.RowResult, new TablePropertyOptions(new CellLocation("A", 4)));
+            var currentLocation = table.NextVerticalCellLocation;
             var row2 = builder.AddRow(new List<string> { "کد حساب", "بدهکار", "بستانکار" }, new RowPropertyOptions(currentLocation));
-            currentLocation = row2.NextVerticalLocation;
+            currentLocation = row2.NextVerticalCellLocation;
             var table2 = builder.AddTable(result.RowResult, new TablePropertyOptions(currentLocation));
-            currentLocation = table2.NextVerticalLocation;
+            currentLocation = table2.NextVerticalCellLocation;
             var accountheader = TableTemplates.AccountHeader(currentLocation);
-            currentLocation = accountheader.NextVerticalLocation;
+            currentLocation = accountheader.NextVerticalCellLocation;
             var accounts = TableTemplates.Accounts(result.Accounts, currentLocation);
-            currentLocation = accounts.NextHorizontalLocation;
-            currentLocation = new Location(currentLocation.X, currentLocation.Y - 3);
+            currentLocation = accounts.NextHorizontalCellLocation;
+            currentLocation = new CellLocation(currentLocation.X, currentLocation.Y - 3);
 
             var multiplexHeader = TableTemplates.Multiplex(result.SummaryAccounts, currentLocation);
 
 
             Border border = new(LineStyle.Thick, Color.Black);
-            row.BackColor = Color.Gray;
-            row2.BackColor = Color.Gray;
+            row.BackgroundColor = Color.Gray;
+            row2.BackgroundColor = Color.Gray;
             table.InlineBorder = border;
             table.OutsideBorder = border;
             table2.InlineBorder = border;

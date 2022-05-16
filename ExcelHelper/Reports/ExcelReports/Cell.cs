@@ -4,23 +4,23 @@ namespace ExcelHelper.Reports.ExcelReports
 {
     public class Cell
     {
-        public Cell(Location location)
+        public Cell(CellLocation cellLocation)
         {
-            Location = location;
+            CellLocation = cellLocation;
         }
         public string Name { get; set; } //TODO: Add Name property somehow as column (cell) identifier
         internal Type Type { get; set; }
         public object Value { get; set; }
-        public Location Location { get; set; }
+        public CellLocation CellLocation { get; set; }
         public bool Wordwrap { get; set; }
         public TextAlign? TextAlign { get; set; }
-        public Category Category { get; set; } = Category.General;
+        public CellType CellType { get; set; } = CellType.General;
         public bool Visible { get; set; } = true;
         // TODO: Add Comments to cells
         public bool? IsLocked { get; set; } = null; //Default is null, and it gets Sheet "IsLocked" property value in this case, but if specified, it will override it
     }
 
-    public enum Category
+    public enum CellType
     {
         General,
         Number,

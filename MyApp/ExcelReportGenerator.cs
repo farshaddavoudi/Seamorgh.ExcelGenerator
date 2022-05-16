@@ -34,7 +34,7 @@ namespace MyApp
             var workbook = new WorkBook
             {
                 FileName = "TestName",
-                WBProps = new WBProps { DefaultColumnWidth = 40 },
+                SheetsDefaultStyles = new SheetsDefaultStyles { DefaultColumnWidth = 40 },
                 Sheets = new List<Sheet> { new("")
                     {
                         Name = "MySheet",
@@ -48,39 +48,39 @@ namespace MyApp
                                     {
                                         Cells = new List<Cell>
                                         {
-                                            new(new Location(3,5)){Value = "احمد", Category =Category.Text, TextAlign = TextAlign.Center}
+                                            new(new CellLocation(3,5)){Value = "احمد", CellType =CellType.Text, TextAlign = TextAlign.Center}
                                         },
                                         MergedCellsList = new(){"C5:D5"},
                                         //StartLocation = new Location(3,5),
                                         //EndLocation = new Location(4,5),
-                                        ForeColor = Color.DarkGreen,
-                                        BackColor = Color.Aqua,
+                                        FontColor = Color.DarkGreen,
+                                        BackgroundColor = Color.Aqua,
                                         OutsideBorder = new Border(LineStyle.DashDotDot, Color.Brown)
                                     },
                                     new()
                                     {
                                         Cells = new List<Cell>
                                         {
-                                            new(new Location(3,6)){Value = "کامبیز دیرباز", Category =Category.Text, TextAlign = TextAlign.Center}
+                                            new(new CellLocation(3,6)){Value = "کامبیز دیرباز", CellType =CellType.Text, TextAlign = TextAlign.Center}
                                         },
                                         MergedCellsList = new(){"C6:D6"},
                                         //StartLocation = new Location(3,6),
                                         //EndLocation = new Location(4,6),
-                                        ForeColor = Color.DarkGreen,
-                                        BackColor = Color.Aqua,
+                                        FontColor = Color.DarkGreen,
+                                        BackgroundColor = Color.Aqua,
                                         OutsideBorder = new Border(LineStyle.DashDotDot, Color.Brown)
                                     },
                                     new()
                                     {
                                         Cells = new List<Cell>
                                         {
-                                            new(new Location(3,7)){Value = "اصغر فرهادی", Category =Category.Text, TextAlign = TextAlign.Center}
+                                            new(new CellLocation(3,7)){Value = "اصغر فرهادی", CellType =CellType.Text, TextAlign = TextAlign.Center}
                                         },
                                         MergedCellsList = new(){"C7:D7"},
                                         //StartLocation = new Location(3,7),
                                         //EndLocation = new Location(4,7),
-                                        ForeColor = Color.DarkGreen,
-                                        BackColor = Color.Aqua,
+                                        FontColor = Color.DarkGreen,
+                                        BackgroundColor = Color.Aqua,
                                         OutsideBorder = new Border(LineStyle.DashDotDot, Color.Brown)
                                     }
                                 },
@@ -102,24 +102,24 @@ namespace MyApp
                             {
                                 Cells = new List<Cell>
                                 {
-                                    new(new Location(3,2)){Value = "فرشاد", Category =Category.Text, TextAlign = TextAlign.Right}
+                                    new(new CellLocation(3,2)){Value = "فرشاد", CellType =CellType.Text, TextAlign = TextAlign.Right}
                                 },
                                 MergedCellsList = new(){"C2:D2"},
                                 //StartLocation = new Location(2,2),
                                 //EndLocation = new Location(4,2),
-                                ForeColor = Color.BlueViolet,
-                                BackColor = Color.AliceBlue,
+                                FontColor = Color.BlueViolet,
+                                BackgroundColor = Color.AliceBlue,
                                 OutsideBorder = new Border(LineStyle.DashDotDot, Color.Red)
                             }
     },
                         Cells = new List<Cell>
                         {
-                            new Cell(new Location("A",1)){Value = 11, Category = Category.Percentage, TextAlign = TextAlign.Left
+                            new Cell(new CellLocation("A",1)){Value = 11, CellType = CellType.Percentage, TextAlign = TextAlign.Left
 },
-                            new Cell(new Location(2, 1)) { Value = 112343, Category = Category.Currency },
-                            new Cell(new Location("D", 1)) { Value = 112 },
-                            new Cell(new Location(1, 2)) { Value = 211, TextAlign = TextAlign.Center },
-                            new Cell(new Location(2, 2)) { Value = 212 },
+                            new Cell(new CellLocation(2, 1)) { Value = 112343, CellType = CellType.Currency },
+                            new Cell(new CellLocation("D", 1)) { Value = 112 },
+                            new Cell(new CellLocation(1, 2)) { Value = 211, TextAlign = TextAlign.Center },
+                            new Cell(new CellLocation(2, 2)) { Value = 212 },
                         },
                     }
                 }

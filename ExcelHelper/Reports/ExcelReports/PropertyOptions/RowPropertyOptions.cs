@@ -4,6 +4,6 @@ namespace ExcelHelper.Reports.ExcelReports.PropertyOptions
 {
     public class RowPropertyOptions : PropertyOption
     {
-        public RowPropertyOptions(Location startLocation) : base(startLocation) { }
+        public RowPropertyOptions(CellLocation startCellLocation) : base(startCellLocation) { }
     }
 }

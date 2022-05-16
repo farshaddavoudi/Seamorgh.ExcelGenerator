@@ -52,9 +52,9 @@ namespace ExcelGenerator
             //-------------------------------------------
             var xlWorkbook = new XLWorkbook
             {
-                RightToLeft = workBook.WBProps.IsRightToLeft,
-                ColumnWidth = workBook.WBProps.DefaultColumnWidth,
-                RowHeight = workBook.WBProps.DefaultRowHeight
+                RightToLeft = workBook.SheetsDefaultStyles.IsRightToLeft,
+                ColumnWidth = workBook.SheetsDefaultStyles.DefaultColumnWidth,
+                RowHeight = workBook.SheetsDefaultStyles.DefaultRowHeight
             };
 
             // Check sheet names are unique
@@ -183,25 +183,25 @@ namespace ExcelGenerator
                         xlSheet.ConfigureRow(tableRow, sheet.Columns, sheet.IsLocked);
                     }
 
-                    var tableRange = xlSheet.Range(table.StartLocation.Y, table.StartLocation.X,
-                        table.EndLocation.Y, table.EndLocation.X);
+                    var tableRange = xlSheet.Range(table.StartCellLocation.Y, table.StartCellLocation.X,
+                        table.EndCellLocation.Y, table.EndCellLocation.X);
 
                     // Config Outside-Border
-                    XLBorderStyleValues? outsideBorder = GetXlBorderLineStyle(table.OutsideBorder.LineStyle);
+                    XLBorderStyleValues? outsideBorder = GetXlBorderLineStyle(table.OutsideBorder.BorderLineStyle);
 
                     if (outsideBorder is not null)
                     {
                         tableRange.Style.Border.SetOutsideBorder((XLBorderStyleValues)outsideBorder);
-                        tableRange.Style.Border.SetOutsideBorderColor(XLColor.FromColor(table.OutsideBorder.Color));
+                        tableRange.Style.Border.SetOutsideBorderColor(XLColor.FromColor(table.OutsideBorder.BorderColor));
                     }
 
                     // Config Inside-Border
-                    XLBorderStyleValues? insideBorder = GetXlBorderLineStyle(table.InlineBorder.LineStyle);
+                    XLBorderStyleValues? insideBorder = GetXlBorderLineStyle(table.InlineBorder.BorderLineStyle);
 
                     if (insideBorder is not null)
                     {
                         tableRange.Style.Border.SetInsideBorder((XLBorderStyleValues)insideBorder);
-                        tableRange.Style.Border.SetInsideBorderColor(XLColor.FromColor(table.InlineBorder.Color));
+                        tableRange.Style.Border.SetInsideBorderColor(XLColor.FromColor(table.InlineBorder.BorderColor));
                     }
 
                     // Apply table merges here
@@ -252,39 +252,39 @@ namespace ExcelGenerator
             // Infer XLDataType and value from "cell" category
             XLDataType? xlDataType;
             object cellValue = cell.Value;
-            switch (cell.Category)
+            switch (cell.CellType)
             {
-                case Category.Number:
+                case CellType.Number:
                     xlDataType = XLDataType.Number;
                     break;
 
-                case Category.Percentage:
+                case CellType.Percentage:
                     xlDataType = XLDataType.Text;
                     cellValue = $"{cellValue}%";
                     break;
 
-                case Category.Currency:
+                case CellType.Currency:
                     xlDataType = XLDataType.Number;
                     if (cellValue.IsNumber() is false)
                         throw new Exception("Cell with Currency category should be Number type");
                     cellValue = Convert.ToDecimal(cellValue).ToString("##,###");
                     break;
 
-                case Category.MiladiDate:
+                case CellType.MiladiDate:
                     xlDataType = XLDataType.DateTime;
                     if (cellValue is not DateTime)
                         throw new Exception("Cell with MiladiDate category should be DateTime type");
                     break;
 
-                case Category.SolarHijriDate:
+                case CellType.SolarHijriDate:
                     if (cellValue is not DateTime)
                         throw new Exception("Cell with SolarHijriDate category should be DateTime type");
                     cellValue = Convert.ToDateTime(cellValue).ToShortPersianDateString();
                     xlDataType = XLDataType.Text;
                     break;
 
-                case Category.Text:
-                case Category.Formula:
+                case CellType.Text:
+                case CellType.Formula:
                     xlDataType = XLDataType.Text;
                     break;
 
@@ -308,7 +308,7 @@ namespace ExcelGenerator
 
             if (isLocked is null)
             { // Get from ColumnProps level
-                var x = cell.Location.X;
+                var x = cell.CellLocation.X;
 
                 var relatedColumnProp = columnProps.SingleOrDefault(c => c.ColumnNo == x);
 
@@ -323,12 +323,12 @@ namespace ExcelGenerator
             //-------------------------------------------
             //  Map column per Cells loop cycle
             //-------------------------------------------
-            var locationCell = xlSheet.Cell(cell.Location.Y, cell.Location.X);
+            var locationCell = xlSheet.Cell(cell.CellLocation.Y, cell.CellLocation.X);
 
             if (xlDataType is not null)
                 locationCell.SetDataType((XLDataType)xlDataType);
 
-            if (cell.Category == Category.Formula)
+            if (cell.CellType == CellType.Formula)
                 locationCell.SetFormulaA1(cellValue.ToString());
             else
                 locationCell.SetValue(cellValue);
@@ -361,35 +361,35 @@ namespace ExcelGenerator
 
             if (row.Cells.Count != 0)
             {
-                if (row.StartLocation is not null && row.EndLocation is not null)
+                if (row.StartCellLocation is not null && row.EndCellLocation is not null)
                 {
-                    var xlRow = xlSheet.Row(row.Cells.First().Location.Y);
-                    if (row.Height is not null)
-                        xlRow.Height = (double)row.Height;
+                    var xlRow = xlSheet.Row(row.Cells.First().CellLocation.Y);
+                    if (row.RowHeight is not null)
+                        xlRow.Height = (double)row.RowHeight;
 
-                    var xlRowRange = xlSheet.Range(row.StartLocation.Y, row.StartLocation.X, row.EndLocation.Y,
-                        row.EndLocation.X);
-                    xlRowRange.Style.Font.SetFontColor(XLColor.FromColor(row.ForeColor));
-                    xlRowRange.Style.Fill.SetBackgroundColor(XLColor.FromColor(row.BackColor));
+                    var xlRowRange = xlSheet.Range(row.StartCellLocation.Y, row.StartCellLocation.X, row.EndCellLocation.Y,
+                        row.EndCellLocation.X);
+                    xlRowRange.Style.Font.SetFontColor(XLColor.FromColor(row.FontColor));
+                    xlRowRange.Style.Fill.SetBackgroundColor(XLColor.FromColor(row.BackgroundColor));
 
-                    XLBorderStyleValues? outsideBorder = GetXlBorderLineStyle(row.OutsideBorder.LineStyle);
+                    XLBorderStyleValues? outsideBorder = GetXlBorderLineStyle(row.OutsideBorder.BorderLineStyle);
 
                     if (outsideBorder is not null)
                     {
                         xlRowRange.Style.Border.SetOutsideBorder((XLBorderStyleValues)outsideBorder);
                         xlRowRange.Style.Border.SetOutsideBorderColor(
-                            XLColor.FromColor(row.OutsideBorder.Color));
+                            XLColor.FromColor(row.OutsideBorder.BorderColor));
                     }
 
                     // TODO: For Inside border, the row should be considered as Ranged (like Table). I persume it is not important for this phase
                 }
                 else
                 {
-                    var xlRow = xlSheet.Row(row.Cells.First().Location.Y);
-                    if (row.Height is not null)
-                        xlRow.Height = (double)row.Height;
-                    xlRow.Style.Font.SetFontColor(XLColor.FromColor(row.ForeColor));
-                    xlRow.Style.Fill.SetBackgroundColor(XLColor.FromColor(row.BackColor));
+                    var xlRow = xlSheet.Row(row.Cells.First().CellLocation.Y);
+                    if (row.RowHeight is not null)
+                        xlRow.Height = (double)row.RowHeight;
+                    xlRow.Style.Font.SetFontColor(XLColor.FromColor(row.FontColor));
+                    xlRow.Style.Fill.SetBackgroundColor(XLColor.FromColor(row.BackgroundColor));
                     xlRow.Style.Border.SetOutsideBorder(XLBorderStyleValues.Dotted);
                     xlRow.Style.Border.SetInsideBorder(XLBorderStyleValues.Thick);
                     xlRow.Style.Border.SetTopBorder(XLBorderStyleValues.Thick);

@@ -44,12 +44,12 @@ namespace ExcelHelper.Reports
             {
 
                 Row row = new();
-                var location = new Location(options.StartLocation.X, options.StartLocation.Y);
+                var location = new CellLocation(options.StartCellLocation.X, options.StartCellLocation.Y);
                 foreach (var cell in cells)
                 {
                     if (cell is string)
                     {
-                        row.Cells.Add(AddCell(cell, "", new CellsPropertyOptions(new Location(location.X, location.Y))));
+                        row.Cells.Add(AddCell(cell, "", new CellsPropertyOptions(new CellLocation(location.X, location.Y))));
                         location.X++;
                     }
                     else
@@ -64,13 +64,13 @@ namespace ExcelHelper.Reports
                                 {
                                     if (attr.Visible != false)
                                     {
-                                        row.Cells.Add(AddCell(cell, prop.Name, new CellsPropertyOptions(new Location(location.X, location.Y))));
+                                        row.Cells.Add(AddCell(cell, prop.Name, new CellsPropertyOptions(new CellLocation(location.X, location.Y))));
                                         location.X++;
                                     }
                                 }
                                 else
                                 {
-                                    row.Cells.Add(AddCell(cell, prop.Name, new CellsPropertyOptions(new Location(location.X, location.Y))));
+                                    row.Cells.Add(AddCell(cell, prop.Name, new CellsPropertyOptions(new CellLocation(location.X, location.Y))));
                                     location.X++;
                                 }
                             }
@@ -78,7 +78,7 @@ namespace ExcelHelper.Reports
                     }
                     for (int i = 0; i < emptyCells; i++)
                     {
-                        row.Cells.Add(AddCell("", "", new CellsPropertyOptions(new Location(location.X, location.Y))));
+                        row.Cells.Add(AddCell("", "", new CellsPropertyOptions(new CellLocation(location.X, location.Y))));
                         location.X++;
 
                     }
@@ -92,11 +92,11 @@ namespace ExcelHelper.Reports
         {
             if (list is IEnumerable cells)
             {
-                var location = new Location(options.StartLocation.X, options.StartLocation.Y);
+                var location = new CellLocation(options.StartCellLocation.X, options.StartCellLocation.Y);
                 Row row = new();
                 foreach (var cell in cells)
                 {
-                    row.Cells.Add(AddCell(string.Empty, string.Empty, new CellsPropertyOptions(new Location(location.X, location.Y))));
+                    row.Cells.Add(AddCell(string.Empty, string.Empty, new CellsPropertyOptions(new CellLocation(location.X, location.Y))));
                     location.X++;
                 }
                 return row;
@@ -118,7 +118,7 @@ namespace ExcelHelper.Reports
             if (list is IEnumerable rows)
             {
                 Table table = new();
-                var location = options.StartLocation;
+                var location = options.StartCellLocation;
                 //table.StartLocation = new Location(location.X, location.Y);
                 //table.EndLocation = new Location(location.X, location.Y);
                 foreach (var item in rows)
@@ -153,7 +153,7 @@ namespace ExcelHelper.Reports
 
         private static Cell ConfigCell(object cellObj, string cellName, CellsPropertyOptions options)
         {
-            Cell cell = new(options.StartLocation) { Location = options.StartLocation };
+            Cell cell = new(options.StartCellLocation) { CellLocation = options.StartCellLocation };
             if (cellObj is string)
             {
                 cell.Value = cellObj;
@@ -190,11 +190,11 @@ namespace ExcelHelper.Reports
             {
                 case "Debit":
                     cell.TextAlign = TextAlign.Right;
-                    cell.Category = Category.Currency;
+                    cell.CellType = CellType.Currency;
                     break;
                 case "Credit":
                     cell.TextAlign = TextAlign.Right;
-                    cell.Category = Category.Currency;
+                    cell.CellType = CellType.Currency;
                     break;
 
                 default:
@@ -208,19 +208,19 @@ namespace ExcelHelper.Reports
             {
                 case TypeCode.Decimal:
                     cell.TextAlign = TextAlign.Right;
-                    cell.Category = Category.Currency;
+                    cell.CellType = CellType.Currency;
                     break;
                 case TypeCode.Int32:
                     cell.TextAlign = TextAlign.Right;
-                    cell.Category = Category.Number;
+                    cell.CellType = CellType.Number;
                     break;
                 case TypeCode.String:
                     cell.Wordwrap = true;
-                    cell.Category = Category.Text;
+                    cell.CellType = CellType.Text;
                     break;
                 default:
                     cell.TextAlign = TextAlign.Right;
-                    cell.Category = Category.General;
+                    cell.CellType = CellType.General;
                     break;
             }
         }

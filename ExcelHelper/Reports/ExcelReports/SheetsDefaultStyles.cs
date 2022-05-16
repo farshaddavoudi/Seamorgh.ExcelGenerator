@@ -1,6 +1,6 @@
 ﻿namespace ExcelHelper.Reports.ExcelReports
 {
-    public class WBProps
+    public class SheetsDefaultStyles
     {
         public bool IsRightToLeft { get; set; } = true;
 
